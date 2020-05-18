@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 
 
 # splitting the 100 classes in [num_groups] groups
-# and the indexes of the images belonging to those classes as well
 def get_n_splits(dataset, n_groups):
   
   seed = 41
@@ -30,8 +29,6 @@ def get_n_splits(dataset, n_groups):
   return indexes,labels
 
 
-
-# IncrementalCIFAR class stores the CIFAR100 dataset and some info helpful for the 
 # incremental learning process: the splitting of the groups and of the indexes
 class MyCIFAR100():
 
