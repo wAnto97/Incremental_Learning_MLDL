@@ -106,6 +106,7 @@ class MyCIFAR100():
 
     for index in train_indexes:
       label = self.target_transform(self.dataset.__getitem__(index)[1])
+      print(label)
       if(label >= (group-1)*self.n_classes_group):
           train_indexes.append(index)
 
