@@ -104,7 +104,7 @@ class MyCIFAR100():
     stratify = [self.dataset.__getitem__(i)[1] for i in indexes],random_state=41)
 
     for index in train_indexes:
-      if(self.dataset.__getitem__(index) in list(range(n_groups))):
+      if(self.dataset.__getitem__(index)[1] in list(range(n_groups))):
           train_indexes.append(index)
 
     train_dataset = Subset(self, train_indexes)
