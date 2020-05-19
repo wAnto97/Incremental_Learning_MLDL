@@ -3,8 +3,8 @@
 #TODO:
 
  1.
-   - Joint Training come upper bound
-   - Fine Tuning come lower bound
+   - Joint Training come upper bound x
+   - Fine Tuning come lower bound x
 
 2.
   - Implementare il binary cross entropy loss
