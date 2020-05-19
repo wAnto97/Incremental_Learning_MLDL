@@ -58,21 +58,30 @@ class MyCIFAR100():
 
   # get the subset of the dataset relative to the [group_index] group
 
-  def get_group(self, group_index):
-    indexes = self.indexes_split[group_index]
+  def get_groups(self, n_groups):
+    for group in range(n_groups):
+      indexes += self.indexes_split[group]
     return Subset(self, indexes)
   
-  def get_train_val_from_group(self,group_index):
-    indexes = self.indexes_split[group_index]
+  def get_train_val_group(self,group):
+      indexes = self.indexes_split[group]
 
-    train_indexes,val_indexes = train_test_split(indexes,test_size=0.1,stratify = [self.dataset.__getitem__(i)[1] for i in indexes])
-    # sss = StratifiedShuffleSplit(n_splits = 1, test_size = 0.1, random_state = 41)
-    # splitting_indexes = sss.split(indexes,[self.dataset.__getitem__(i)[1] for i in indexes])
+      train_indexes,val_indexes = train_test_split(indexes,test_size=0.1,\
+      stratify = [self.dataset.__getitem__(i)[1] for i in indexes],random_state=41)
+ 
+      train_dataset = Subset(self, train_indexes)
+      val_dataset = Subset(self, val_indexes)
 
-    # for x,y in splitting_indexes:
-    #     train_indexes = x
-    #     val_indexes = y 
+      return train_dataset,val_dataset
 
+  def get_train_val_joint(self,n_groups):
+    indexes = []
+    for group in range(n_groups):
+      indexes += self.indexes_split[group]
+
+    train_indexes,val_indexes = train_test_split(indexes,test_size=0.1,\
+    stratify = [self.dataset.__getitem__(i)[1] for i in indexes],random_state=41)
+ 
     train_dataset = Subset(self, train_indexes)
     val_dataset = Subset(self, val_indexes)
 
