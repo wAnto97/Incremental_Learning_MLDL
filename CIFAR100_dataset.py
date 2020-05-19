@@ -92,3 +92,26 @@ class MyCIFAR100():
     val_dataset = Subset(self, val_indexes)
 
     return train_dataset,val_dataset
+
+ def get_single_train_joint_validation(n_groups):
+    indexes = []
+    train_indexes = []
+    
+    for group in range(n_groups):
+      indexes += self.indexes_split[group]
+
+    train_indexes_tmp,val_indexes = train_test_split(indexes,test_size=0.1,\
+    stratify = [self.dataset.__getitem__(i)[1] for i in indexes],random_state=41)
+    
+    for index in train_indexes:
+        if(self.dataset.__getitem__(index) == n_groups - 1):
+            train_indexes.append(index)
+
+    train_dataset = Subset(self, train_indexes)
+    val_dataset = Subset(self, val_indexes)
+
+    return train_dataset,val_dataset     
+
+
+
+
