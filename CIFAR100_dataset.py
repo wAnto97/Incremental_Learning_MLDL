@@ -93,7 +93,7 @@ class MyCIFAR100():
 
     return train_dataset,val_dataset
 
-  def get_single_train_joint_validation(n_groups):
+  def get_single_train_joint_validation(self,n_groups):
     indexes = []
     train_indexes = []
 
