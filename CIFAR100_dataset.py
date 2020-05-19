@@ -104,9 +104,8 @@ class MyCIFAR100():
     train_indexes_tmp,val_indexes = train_test_split(indexes,test_size=0.1,\
     stratify = [self.dataset.__getitem__(i)[1] for i in indexes],random_state=41)
 
-    for index in train_indexes:
+    for index in train_indexes_tmp:
       label = self.target_transform(self.dataset.__getitem__(index)[1])
-      print(label)
       if(label >= (group-1)*self.n_classes_group):
           train_indexes.append(index)
 
