@@ -39,6 +39,7 @@ class MyCIFAR100():
   def __init__(self, root, n_groups = 10, train=True, transform=None, target_transform=None, download=False):
         self.dataset = CIFAR100(root, train=train, transform = None, target_transform=None, download=download)
         self.n_groups = n_groups
+        self.n_classes_group = int(100 / n_groups)
         self.indexes_split,self.labels_split = get_n_splits(self.dataset, n_groups)
         self.sorted_labels = []
         self.transform = transform
@@ -93,18 +94,19 @@ class MyCIFAR100():
 
     return train_dataset,val_dataset
 
-  def get_single_train_joint_validation(self,n_groups):
+  def get_single_train_joint_validation(self,group):
     indexes = []
     train_indexes = []
 
-    for group in range(n_groups):
+    for group in range(group):
       indexes += self.indexes_split[group]
 
     train_indexes_tmp,val_indexes = train_test_split(indexes,test_size=0.1,\
     stratify = [self.dataset.__getitem__(i)[1] for i in indexes],random_state=41)
 
     for index in train_indexes:
-      if(self.__getitem__(index)[1] in list(range(n_groups))):
+      label = self.target_transform(self.dataset.__getitem__(index)[1])
+      if(label < (group-1)*self.n_classes_group):
           train_indexes.append(index)
 
     train_dataset = Subset(self, train_indexes)
