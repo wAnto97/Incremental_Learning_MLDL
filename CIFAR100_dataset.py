@@ -59,9 +59,14 @@ class MyCIFAR100():
 
   # get the subset of the dataset relative to the [group_index] group
 
-  def get_groups(self, n_groups):
+  def get_groups_joint(self, n_groups):
+    indexes = []  
     for group in range(n_groups):
       indexes += self.indexes_split[group]
+    return Subset(self, indexes)
+
+  def get_group(self, n_groups):
+    indexes = self.indexes_split[group]
     return Subset(self, indexes)
   
   def get_train_val_group(self,group):
