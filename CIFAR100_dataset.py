@@ -42,13 +42,14 @@ class MyCIFAR100():
         self.indexes_split,self.labels_split = get_n_splits(self.dataset, n_groups)
         self.sorted_labels = []
         self.transform = transform
+        self.target_transform = lambda target : self.sorted_labels.index(target)
 
         for l in self.labels_split:
             self.sorted_labels += l
 
         
   def __getitem__(self,index):
-    self.target_transform = lambda target : self.sorted_labels.index(target)
+    
     if(self.transform):
         image = self.transform(self.dataset[index][0])
     if(self.target_transform):
@@ -64,7 +65,7 @@ class MyCIFAR100():
     return Subset(self, indexes)
   
   def get_train_val_group(self,group):
-      indexes = self.indexes_split[group]
+      indexes = self.indexes_split[group-1]
 
       train_indexes,val_indexes = train_test_split(indexes,test_size=0.1,\
       stratify = [self.dataset.__getitem__(i)[1] for i in indexes],random_state=41)
