@@ -8,4 +8,4 @@
 
 2.
   - Implementare il binary cross entropy loss
-  - Creare classification e distillation loss e aggiungerl
+  - Creare classification e distillation loss e aggiungerli per implementare LwF
