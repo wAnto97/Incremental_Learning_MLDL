@@ -1,6 +1,7 @@
 # IncrementalLeraningMLDL
 
 #TODO:
+
  1.
    - Joint Training come upper bound
    - Fine Tuning come lower bound
