@@ -65,7 +65,7 @@ class MyCIFAR100():
       indexes += self.indexes_split[group]
     return Subset(self, indexes)
 
-  def get_group(self, n_groups):
+  def get_group(self, group):
     indexes = self.indexes_split[group]
     return Subset(self, indexes)
   
