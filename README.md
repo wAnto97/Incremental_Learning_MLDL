@@ -7,9 +7,9 @@
    - [x] Fine Tuning come lower bound 
 
 # 2.
-  - [x] Implementare il binary cross entropy loss 
-  - [x] Implementare classification e distillation loss e aggiungerli per implementare LwF 
-  - [x] Implementare iCarl --> 
+  - [ ] Implementare il binary cross entropy loss 
+  - [ ] Implementare classification e distillation loss e aggiungerli per implementare LwF 
+  - [ ] Implementare iCarl --> 
                            - [ ] Exemplars
                            - [ ] NCM classifier 
  
