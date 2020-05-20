@@ -9,7 +9,7 @@
 # 2.
   - [ ] Implementare il binary cross entropy loss 
   - [ ] Implementare classification e distillation loss e aggiungerli per implementare LwF 
-  - [ ] Implementare iCarl --> 
-                           - [ ] Exemplars
-                           - [ ] NCM classifier 
+  - [ ] Implementare iCarl
+      - [ ] Exemplars
+      - [ ] NCM classifier 
  
