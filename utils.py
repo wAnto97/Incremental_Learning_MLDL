@@ -1,4 +1,5 @@
 import json
+import yaml
 
 class utils():
     def __init__(self):
@@ -35,3 +36,34 @@ class utils():
         with open(file_path,mode='a') as file_out:
             json.dump(json_out,file_out)
             file_out.write('\n')
+
+    def readFileLosses(self,file_path):
+        val_losses_per_group = []
+        train_loss_per_group = []
+        with open(file_path,mode='r') as f:
+            for index,line in enumerate(f):
+                json_obj = (yaml.load(str(line)))
+                train_loss_per_group.append(json_obj['group' + str(index+1)]['training_loss'])
+                val_losses_per_group.append(json_obj['group' + str(index+1)]['validation_loss'])
+        
+        return train_loss_per_group,val_losses_per_group
+
+    def readFileMetrics(self,file_path,report=False):
+        accuracy_train_per_group = []
+        accuracy_val_per_group = []
+        accuracy_test_per_group = []
+        report_per_group = []
+        
+        with open(file_path,mode='r') as f:
+            for index,line in enumerate(f):
+                json_obj = (yaml.load(str(line)))
+                accuracy_train_per_group.append(json_obj['group' + str(index+1)]['training_accuracy'])
+                accuracy_val_per_group.append(json_obj['group' + str(index+1)]['validation_accuracy'])
+                accuracy_test_per_group.append(json_obj['group' + str(index+1)]['test_accuracy'])
+                if report == True:
+                    report_per_group.append(json_obj['group' + str(index+1)]['report'])
+            
+        if(report==True):
+            return accuracy_train_per_group,accuracy_val_per_group,accuracy_test_per_group,report_per_group
+
+        return accuracy_train_per_group,accuracy_val_per_group,accuracy_test_per_group

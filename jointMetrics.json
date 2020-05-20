@@ -1,0 +1,10 @@
+{"group1": {"training_accuracy": 0.9571111111111111, "validation_accuracy": 0.856, "test_accuracy": 0.877}}
+{"group2": {"training_accuracy": 0.9796666666666667, "validation_accuracy": 0.802, "test_accuracy": 0.8305}}
+{"group3": {"training_accuracy": 0.9817777777777777, "validation_accuracy": 0.8113333333333334, "test_accuracy": 0.789}}
+{"group4": {"training_accuracy": 0.9836111111111111, "validation_accuracy": 0.808, "test_accuracy": 0.77375}}
+{"group5": {"training_accuracy": 0.9740888888888889, "validation_accuracy": 0.778, "test_accuracy": 0.7464}}
+{"group6": {"training_accuracy": 0.9698888888888889, "validation_accuracy": 0.763, "test_accuracy": 0.7176666666666667}}
+{"group7": {"training_accuracy": 0.9643809523809523, "validation_accuracy": 0.7617142857142857, "test_accuracy": 0.7232857142857143}}
+{"group8": {"training_accuracy": 0.9554722222222222, "validation_accuracy": 0.76875, "test_accuracy": 0.7205}}
+{"group9": {"training_accuracy": 0.9391111111111111, "validation_accuracy": 0.7311111111111112, "test_accuracy": 0.6997777777777778}}
+{"group10": {"training_accuracy": 0.9246888888888889, "validation_accuracy": 0.7186, "test_accuracy": 0.6919}}
