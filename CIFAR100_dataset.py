@@ -56,7 +56,7 @@ class MyCIFAR100():
     if(self.target_transform):
         target = self.target_transform(self.dataset[index][1])
 
-    return image,target
+    return image,target,index
 
   # get the subset of the dataset relative to the [group_index] group
 
