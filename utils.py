@@ -30,8 +30,8 @@ class utils():
         json_out['group'+str(group)]['validation_accuracy'] = validation_accuracy
         json_out['group'+str(group)]['test_accuracy'] = test_accuracy
         if(len(metrics) == 4):
-            classification_report = metrics[3]
-            json_out['group'+str(group)]['report'] = classification_report
+            conf_matrix = metrics[3]
+            json_out['group'+str(group)]['conf_matrix'] = conf_matrix
 
         with open(file_path,mode='a') as file_out:
             json.dump(json_out,file_out)
