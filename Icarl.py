@@ -1,5 +1,7 @@
 import torch
 import numpy as np
+from torch import nn
+
 class Icarl():
     def __init__(self):
         self.exemplar_set=[]
@@ -85,7 +87,7 @@ class Icarl():
         return self.exemplar_centroids
     
     
-    def predict(self,images):
+    def predict(self,images,net):
         exemplar_means = self.exemplar_centroids
         means = torch.stack(exemplar_means) # (n_classes, feature_size)
         means = torch.stack([means] * len(images)) # (batch_size, n_classes, feature_size)
