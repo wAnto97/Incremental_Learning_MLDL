@@ -94,7 +94,7 @@ class Icarl():
         means = means.transpose(1, 2) # (batch_size, feature_size, n_classes)
 
         with torch.no_grad():
-            features = net.feature_extractor(images) # (batch_size, feature_size)
+            features = net.feature_extractor(images.cuda()) # (batch_size, feature_size)
             for i in range(features.size(0)): # Normalize
                 features.data[i] = features.data[i] / features.data[i].norm()
             features = features.unsqueeze(2) # (batch_size, feature_size, 1)
