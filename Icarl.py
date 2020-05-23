@@ -17,7 +17,7 @@ class Icarl():
     
     def reduce_exemplars(self,n_old_classes):
         m = int(self.K/n_old_classes)
-        for i in enumerate(len(self.exemplar_set)):
+        for i in range(len(self.exemplar_set)):
             self.exemplar_set[i]=self.exemplar_set[i][:m]
         
         return self.exemplar_set
