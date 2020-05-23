@@ -18,10 +18,13 @@ class MyNet():
 
         return prev_net,self.net
 
-    def prepare_training(self,LR,MOMENTUM,WEIGHT_DECAY,STEP_SIZE,GAMMA):    
+    def prepare_training(self,LR,MOMENTUM,WEIGHT_DECAY,STEP_SIZE,GAMMA,typeScheduler):    
         parameters_to_optimize = self.net.parameters()
         optimizer = optim.SGD(parameters_to_optimize, lr=LR, momentum=MOMENTUM, weight_decay=WEIGHT_DECAY)
-        scheduler = optim.lr_scheduler.MultiStepLR(optimizer, STEP_SIZE, gamma=GAMMA)
+        if typeScheduler == 'multistep':
+            scheduler = optim.lr_scheduler.MultiStepLR(optimizer, STEP_SIZE, gamma=GAMMA)
+        else:
+            scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer,'min')
 
         return (optimizer,scheduler)
     
