@@ -2,7 +2,7 @@ from IncrementalLeraningMLDL.resnet_cifar import resnet32
 import torch
 from torch import nn
 import copy
-from torch import optim
+import torch.optim as optim
 
 class MyNet():
     def __init__(self,n_classes):
