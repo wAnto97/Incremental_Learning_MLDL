@@ -1,7 +1,7 @@
 import torch
 import numpy as np
 from torch import nn
-
+import sys
 class Icarl():
     def __init__(self):
         self.exemplar_set=[]
