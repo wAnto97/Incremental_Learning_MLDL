@@ -9,7 +9,7 @@ class LwF():
         clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
         dist_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
         
-        if step == 1:
+        if step == 1 or current_step == -1:
             clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
             return clf_loss,clf_loss,clf_loss-clf_loss
         clf_loss = clf_criterion(new_output[:,n_old_classes:],utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:])
