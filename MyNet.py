@@ -24,3 +24,27 @@ class MyNet():
         scheduler = optim.lr_scheduler.MultiStepLR(optimizer, STEP_SIZE, gamma=GAMMA)
 
         return (optimizer,scheduler)
+    
+    def freeze_conv(self):
+        for i,child in enumerate(self.net.children()):
+            if(i==5):
+                break
+            for param in child.parameters():
+                param.requires_grad = False
+        
+        return self.net
+
+    def freeze_neurons(self,n_old_classes):
+        for param in self.net.linear.parameters():
+            param.grad[:n_old_classes]=0
+        
+        return self.net
+
+    def unfreeze_conv(self):
+        for i,child in enumerate(net.children()):
+            if(i==5):
+                break
+            for param in child.parameters():
+                param.requires_grad = True
+        
+        return self.net
