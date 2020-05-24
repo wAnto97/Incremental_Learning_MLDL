@@ -31,11 +31,12 @@ class Icarl():
         """
         # Compute and cache features for each example
         features = []
-        for img,_ in images_indices:
-            img=img.unsqueeze(0)
-            feature = net.feature_extractor(img.cuda()).data.cpu().numpy() #-> la nostra feature extractor
-            feature = feature / np.linalg.norm(feature) # Normalize
-            features.append(feature[0])
+        with torch.no_grad():
+            for img,_ in images_indices:
+                img=img.unsqueeze(0)
+                feature = net.feature_extractor(img.cuda()).data.cpu().numpy() #-> la nostra feature extractor
+                feature = feature / np.linalg.norm(feature) # Normalize
+                features.append(feature[0])
 
         features = np.array(features)
         class_mean = np.mean(features, axis=0)
