@@ -39,14 +39,21 @@ class Utils():
             json.dump(json_out,file_out)
             file_out.write('\n')
 
-    def readFileLosses(self,file_path):
+    def readFileLosses(self,file_path,type):
+        if type == 'LwF' or type == 'iCarl':
+            loss1 = 'classification_loss'
+            loss2 = 'distillation_loss'
+        else:
+            loss1 = 'training_loss'
+            loss2 = 'validation_loss'
+
         val_losses_per_group = []
         train_loss_per_group = []
         with open(file_path,mode='r') as f:
             for index,line in enumerate(f):
                 json_obj = (yaml.load(str(line)))
-                train_loss_per_group.append(json_obj['group' + str(index+1)]['training_loss'])
-                val_losses_per_group.append(json_obj['group' + str(index+1)]['validation_loss'])
+                train_loss_per_group.append(json_obj['group' + str(index+1)][loss1])
+                val_losses_per_group.append(json_obj['group' + str(index+1)][loss2])
         
         return train_loss_per_group,val_losses_per_group
 
@@ -63,7 +70,7 @@ class Utils():
                 accuracy_val_per_group.append(json_obj['group' + str(index+1)]['validation_accuracy'])
                 accuracy_test_per_group.append(json_obj['group' + str(index+1)]['test_accuracy'])
                 if report == True:
-                    report_per_group.append(json_obj['group' + str(index+1)]['report'])
+                    report_per_group.append(json_obj['group' + str(index+1)]['conf_matrix'])
             
         if(report==True):
             return accuracy_train_per_group,accuracy_val_per_group,accuracy_test_per_group,report_per_group
