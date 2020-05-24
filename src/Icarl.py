@@ -72,6 +72,7 @@ class Icarl():
         return class_images
     
     def compute_centroids(self,net,training_set):
+        self.exemplar_centroids=[]
         for exemplar_class_set in self.exemplar_set:
             features = []
             # Extract feature for each exemplar in exemplar_class_set
