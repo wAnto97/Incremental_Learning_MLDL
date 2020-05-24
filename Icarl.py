@@ -73,16 +73,17 @@ class Icarl():
             features = []
             # Extract feature for each exemplar in exemplar_class_set
             class_images = self.get_class_images(training_set,exemplar_class_set)
-            for img in class_images:
-                img=img.unsqueeze(0)
-                feature = net.feature_extractor(img.cuda().data)
-                feature = feature.squeeze()
-                feature.data = feature.data / feature.data.norm() # Normalize
-                features.append(feature)
-            features = torch.stack(features)
-            mu_y = features.mean(0).squeeze()
-            mu_y.data = mu_y.data / mu_y.data.norm() # Normalize
-            self.exemplar_centroids.append(mu_y)
+            with torch.no_grad():
+                for img in class_images:
+                    img=img.unsqueeze(0)
+                    feature = net.feature_extractor(img.cuda())
+                    feature = feature.squeeze()
+                    feature.data = feature.data / feature.data.norm() # Normalize
+                    features.append(feature)
+                features = torch.stack(features)
+                mu_y = features.mean(0).squeeze()
+                mu_y.data = mu_y.data / mu_y.data.norm() # Normalize
+                self.exemplar_centroids.append(mu_y)
         
         return self.exemplar_centroids
     
