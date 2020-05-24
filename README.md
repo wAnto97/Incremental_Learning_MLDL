@@ -9,7 +9,9 @@
 # 2.
   - [x] Implementare il binary cross entropy loss 
   - [x] Implementare classification e distillation loss (binary) e aggiungerli per implementare LwF 
+  - [x] Implementare LwF
+  - [x] Test LwF
   - [x] Implementare iCarl
       - [x] Exemplars
       - [x] NCM classifier 
- 
+  - [ ] Test Icarl
