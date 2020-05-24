@@ -8,15 +8,17 @@ class Icarl():
         self.exemplar_centroids=[]
         self.K=2000
     
-    def build_exemplars(self,net,images_indices,n_old_classes,n_classes=10):
-        m=int(self.K/n_old_classes)
+    def build_exemplars(self,net,images_indices,n_old_classes,n_classes=10):            
+        m=int(self.K/(n_old_classes + n_classes))
+        print('Build:',m)
         for i in range(n_classes):
             self.exemplar_set.append(self.construct_exemplar_class_set(net,images_indices[i],m))
 
         return self.exemplar_set
     
-    def reduce_exemplars(self,n_old_classes):
-        m = int(self.K/n_old_classes)
+    def reduce_exemplars(self,n_old_classes,n_classes=10):
+        m = int(self.K/(n_old_classes+n_classes))
+        print('Reduced:',m)
         for i in range(len(self.exemplar_set)):
             self.exemplar_set[i]=self.exemplar_set[i][:m]
         
