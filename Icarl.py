@@ -75,7 +75,7 @@ class Icarl():
             class_images = self.get_class_images(training_set,exemplar_class_set)
             for img in class_images:
                 img=img.unsqueeze(0)
-                feature = net.feature_extractor(img.cuda())
+                feature = net.feature_extractor(img.cuda().data)
                 feature = feature.squeeze()
                 feature.data = feature.data / feature.data.norm() # Normalize
                 features.append(feature)
@@ -112,7 +112,7 @@ class Icarl():
         dist_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
         
         if step == 1 or current_step==-1:
-            clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
+            clf_loss = clf_criterion(new_output,utils.one_hot_matrix(len(new_output),labels,n_classes*step))
             return clf_loss,clf_loss,clf_loss-clf_loss
         clf_loss = clf_criterion(new_output[:,n_old_classes:],utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:])
         dist_loss = dist_criterion(new_output[:,:n_old_classes],sigmoid(old_outputs))
