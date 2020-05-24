@@ -81,6 +81,15 @@ class Utils():
 
         return train_dataloader,val_dataloader,test_dataloader
     
+    def create_dataloaders_icarl(self, training_set,test_set,group,exemplar_set,BATCH_SIZE):
+        training_set.get_train_exemplars(group,exemplar_set)
+        test = test_set.get_groups_joint(group)
+
+        train_dataloader =  DataLoader(train,batch_size=BATCH_SIZE,drop_last=True,num_workers=4,shuffle=True)
+        test_dataloader = DataLoader(test,batch_size=BATCH_SIZE,drop_last=False,num_workers=4)
+
+        return train_dataloader,test_dataloader
+    
     def create_onehot(self,intLabel,num_classes):
         onehot = torch.zeros(num_classes)
         onehot[intLabel]=1
