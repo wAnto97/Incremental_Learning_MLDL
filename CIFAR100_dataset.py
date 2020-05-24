@@ -67,7 +67,7 @@ class MyCIFAR100():
     return Subset(self, indexes)
 
   def get_group(self, group):
-    indexes = self.indexes_split[group]
+    indexes = self.indexes_split[group-1]
     return Subset(self, indexes)
   
   def get_train_val_group(self,group):
