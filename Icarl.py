@@ -31,7 +31,7 @@ class Icarl():
         features = []
         for img,_ in images_indices:
             img=img.unsqueeze(0)
-            feature = net.feature_extractor(img.cuda().data).data.cpu().numpy() #-> la nostra feature extractor
+            feature = net.feature_extractor(img.cuda()).data.cpu().numpy() #-> la nostra feature extractor
             feature = feature / np.linalg.norm(feature) # Normalize
             features.append(feature[0])
 
