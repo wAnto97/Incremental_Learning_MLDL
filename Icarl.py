@@ -85,7 +85,7 @@ class Icarl():
                     features.append(feature)
                 features = torch.stack(features)
                 mu_y = features.mean(0).squeeze()
-                #mu_y.data = mu_y.data / mu_y.data.norm() # Normalize
+                mu_y.data = mu_y.data / mu_y.data.norm() # Normalize
                 self.exemplar_centroids.append(mu_y)
         
         return self.exemplar_centroids
