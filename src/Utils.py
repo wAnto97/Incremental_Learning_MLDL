@@ -1,7 +1,7 @@
 import json
 import yaml
-import torch
-from torch.utils.data import  DataLoader
+# import torch
+# from torch.utils.data import  DataLoader
 
 class Utils():
     def __init__(self):
@@ -55,13 +55,13 @@ class Utils():
                 train_loss_per_group.append(json_obj['group' + str(index+1)][loss1])
                 val_losses_per_group.append(json_obj['group' + str(index+1)][loss2])
         
-        return train_loss_per_group,val_losses_per_group
+        return {'train_losses':train_loss_per_group,'validation_losses' :val_losses_per_group}
 
-    def readFileMetrics(self,file_path,report=False):
+    def readFileMetrics(self,file_path,cm=False):
         accuracy_train_per_group = []
         accuracy_val_per_group = []
         accuracy_test_per_group = []
-        report_per_group = []
+        cm_per_group = []
         
         with open(file_path,mode='r') as f:
             for index,line in enumerate(f):
@@ -69,13 +69,21 @@ class Utils():
                 accuracy_train_per_group.append(json_obj['group' + str(index+1)]['training_accuracy'])
                 accuracy_val_per_group.append(json_obj['group' + str(index+1)]['validation_accuracy'])
                 accuracy_test_per_group.append(json_obj['group' + str(index+1)]['test_accuracy'])
-                if report == True:
-                    report_per_group.append(json_obj['group' + str(index+1)]['conf_matrix'])
+                if cm == True:
+                    cm_per_group.append(json_obj['group' + str(index+1)]['conf_matrix'])
             
-        if(report==True):
-            return accuracy_train_per_group,accuracy_val_per_group,accuracy_test_per_group,report_per_group
+        if(cm==True):
+            return {'accuracy_train' : accuracy_train_per_group,
+                'accuracy_val_per_group' : accuracy_val_per_group,
+                'accuracy_test_per_group' : accuracy_test_per_group,
+                'conf_matrix' : cm_per_group
+                }
 
-        return accuracy_train_per_group,accuracy_val_per_group,accuracy_test_per_group
+
+        return {'accuracy_train':accuracy_train_per_group,
+                'accuracy_val_per_group' : accuracy_test_per_group,
+                'accuracy_test_per_group' : accuracy_test_per_group,
+                }
 
     def create_dataloaders(self,training_set,test_set,group,BATCH_SIZE):
         train,val = training_set.get_single_train_joint_validation(group)
