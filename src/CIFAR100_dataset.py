@@ -7,14 +7,13 @@ from sklearn.model_selection import train_test_split
 
 # splitting the 100 classes in [num_groups] groups
 # and the indexes of the images belonging to those classes as well
-def get_n_splits(dataset, n_groups):
+def get_n_splits(dataset, n_groups,random_state=41):
   
-  seed = 41
   available_labels = list(range(100))
   n_classes_group = int(100 / n_groups)
   labels = []
   indexes = [[] for i in range(n_groups)]
-  random.seed(seed)
+  random.seed(random_state)
 
   for index in range(n_groups):
     labels_sample = random.sample(available_labels,n_classes_group)
@@ -36,11 +35,12 @@ def get_n_splits(dataset, n_groups):
 # incremental learning process: the splitting of the groups and of the indexes
 class MyCIFAR100():
 
-  def __init__(self, root, n_groups = 10, train=True, transform=None, target_transform=None, download=False):
+  def __init__(self, root, n_groups = 10, train=True, transform=None, target_transform=None, download=False, random_state=41):
         self.dataset = CIFAR100(root, train=train, transform = None, target_transform=None, download=download)
         self.n_groups = n_groups
         self.n_classes_group = int(100 / n_groups)
-        self.indexes_split,self.labels_split = get_n_splits(self.dataset, n_groups)
+        self.random_state = random_state
+        self.indexes_split,self.labels_split = get_n_splits(self.dataset, n_groups,random_state = self.random_state)
         self.sorted_labels = []
         self.transform = transform
         self.target_transform = lambda target : self.sorted_labels.index(target)
