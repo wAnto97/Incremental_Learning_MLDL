@@ -14,4 +14,5 @@
   - [x] Implementare iCarl
       - [x] Exemplars
       - [x] NCM classifier 
-  - [ ] Test Icarl
+  - [x] Test Icarl
+  - [ ] Fare grafici e confusion matrixes dei passi precedenti
