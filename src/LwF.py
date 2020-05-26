@@ -20,5 +20,5 @@ class LwF():
         tot_loss = clf_criterion(new_output,targets)
 
 
-        return tot_loss,clf_loss/2,dist_loss/2
+        return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
     
