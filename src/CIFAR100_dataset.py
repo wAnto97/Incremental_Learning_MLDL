@@ -158,4 +158,4 @@ class MyCIFAR100():
     train_dataset = Subset(self, train_indexes + exemplar_indexes)
     val_dataset = Subset(self,val_indexes)
     
-    return train_dataset
+    return train_dataset,val_dataset
