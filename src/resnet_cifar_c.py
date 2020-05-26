@@ -139,7 +139,7 @@ class ResNet(nn.Module):
         return x
 
     def feature_extractor(self,x):
-         x = self.conv1(x)
+        x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
 
