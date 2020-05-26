@@ -127,4 +127,4 @@ class Icarl():
         tot_loss = clf_criterion(new_output,targets)
 
 
-        return tot_loss,clf_loss*1/(2*step),dist_loss*(step-1)/(2*step)
+        return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
