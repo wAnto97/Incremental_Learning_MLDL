@@ -2,6 +2,8 @@ import torch
 import numpy as np
 from torch import nn
 import sys
+from torch.nn import functional as F
+
 class Icarl():
     def __init__(self):
         self.exemplar_set=[]
@@ -105,7 +107,7 @@ class Icarl():
             features = features.unsqueeze(2) # (batch_size, feature_size, 1)
             features = features.expand_as(means) # (batch_size, feature_size, n_classes)
 
-            dists = (features - means).pow(2).sum(1).squeeze() #(batch_size, n_classes)
+            dists = (F.normalize(features) - means).pow(2).sum(1).squeeze() #(batch_size, n_classes)
             _, preds = dists.min(1)
 
         return preds
