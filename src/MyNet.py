@@ -1,4 +1,4 @@
-from IncrementalLeraningMLDL.src.resnet_cifar import resnet32
+from IncrementalLeraningMLDL.src.resnet_cifar_C import resnet32
 import torch
 from torch import nn
 import copy
