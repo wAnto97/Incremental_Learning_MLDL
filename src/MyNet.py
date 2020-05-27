@@ -1,4 +1,4 @@
-from IncrementalLeraningMLDL.src.resnet_cifar_c import resnet32
+from IncrementalLeraningMLDL.src.resnet_cifar import resnet32
 import torch
 from torch import nn
 import copy
@@ -7,14 +7,14 @@ import torch.optim as optim
 class MyNet():
     def __init__(self,n_classes):
         self.net = resnet32()
-        self.net.fc = nn.Linear(64,n_classes)
-        self.init_weights = torch.nn.init.kaiming_normal_(self.net.fc.weight)
+        self.net.linear = nn.Linear(64,n_classes)
+        self.init_weights = torch.nn.init.kaiming_normal_(self.net.linear.weight)
     
     def update_network(self,best_net,n_classes,init_weights):
         prev_net = copy.deepcopy(best_net)
-        prev_weights = copy.deepcopy(best_net.fc.weight)
-        self.net.fc = nn.Linear(64,n_classes)
-        self.net.fc.weight.data = torch.cat((prev_weights,init_weights))
+        prev_weights = copy.deepcopy(best_net.linear.weight)
+        self.net.linear = nn.Linear(64,n_classes)
+        self.net.linear.weight.data = torch.cat((prev_weights,init_weights))
 
         return prev_net,self.net
 
