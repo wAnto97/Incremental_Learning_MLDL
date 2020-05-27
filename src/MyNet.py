@@ -12,9 +12,9 @@ class MyNet():
     
     def update_network(self,best_net,n_classes,init_weights):
         prev_net = copy.deepcopy(best_net)
-        prev_weights = copy.deepcopy(best_net.linear.weight)
-        self.net.linear = nn.Linear(64,n_classes)
-        self.net.linear.weight.data = torch.cat((prev_weights,init_weights))
+        prev_weights = copy.deepcopy(best_net.fc.weight)
+        self.net.fc = nn.Linear(64,n_classes)
+        self.net.fc.weight.data = torch.cat((prev_weights,init_weights))
 
         return prev_net,self.net
 
