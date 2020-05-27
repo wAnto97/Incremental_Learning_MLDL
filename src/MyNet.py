@@ -7,8 +7,8 @@ import torch.optim as optim
 class MyNet():
     def __init__(self,n_classes):
         self.net = resnet32()
-        self.net.linear = nn.Linear(64,n_classes)
-        self.init_weights = torch.nn.init.kaiming_normal_(self.net.linear.weight)
+        self.net.fc = nn.Linear(64,n_classes)
+        self.init_weights = torch.nn.init.kaiming_normal_(self.net.fc.weight)
     
     def update_network(self,best_net,n_classes,init_weights):
         prev_net = copy.deepcopy(best_net)
