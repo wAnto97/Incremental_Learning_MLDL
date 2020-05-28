@@ -34,7 +34,7 @@ class Icarl():
         - m : numero di exemplars da selezionare per la i-esima classe
 
         Return:
-        - Lista di immagini (exemplars) per la i-esima classe
+        - Lista di indici relativi alle immagini (exemplars) per la i-esima classe
         """
         features = []
         with torch.no_grad():
@@ -63,7 +63,7 @@ class Icarl():
 
             i = np.argmin(distances) # seleziono l'immagine che minimizza la distanza 
             
-            exemplar_class_set.append(images_indices[i][1].item()) # salvo l'immagine ( non normalizzata! ) nel set degli exemplars
+            exemplar_class_set.append(images_indices[i][1].item()) # salvo l'indice dell'immagine scelta come exemplars
             exemplar_features.append(features[i]) # inserisco la feature-map di quell'exemplar nella lista
             inserted_indices.append(i) # inserisco l'indice da bandire alla prossima iterazione
         
@@ -87,20 +87,19 @@ class Icarl():
         """
         self.exemplar_centroids=[]
         for exemplar_class_set in self.exemplar_set:
-            features = []
-            # Extract feature for each exemplar in exemplar_class_set
-            #class_images = self.get_class_images(training_set,exemplar_class_set) # recupero le immagini 
+            features = [] #lista contenente tutte le features map degli exemplars selezionati per la i-esima classe
+            class_images = self.get_class_images(training_set,exemplar_class_set) # recupero le immagini degli exemplars attraverso gli indici precedentemente selezionati
             with torch.no_grad():
                 for img in exemplar_class_set:
-                    img=img.unsqueeze(0)
-                    feature = net.feature_extractor(img.cuda())
-                    feature = feature.squeeze()
-                    feature.data = feature.data / feature.data.norm() # Normalize
-                    features.append(feature)
-                features = torch.stack(features)
-                mu_y = features.mean(0).squeeze()
-                mu_y.data = mu_y.data / mu_y.data.norm() # Normalize
-                self.exemplar_centroids.append(mu_y)
+                    img=img.unsqueeze(0) # re-shapa l'immagine in modo tale che la dimensione sia : 1x3x32x32
+                    feature = net.feature_extractor(img.cuda()) #estrae la feature map
+                    feature = feature.squeeze() # rimuove tutte le dimensioni pari a 1
+                    feature.data = feature.data / feature.data.norm() # Normalizza
+                    features.append(feature) 
+                features = torch.stack(features) 
+                mu_y = features.mean(0).squeeze() #calcola il centroide e rimuove tutte le dimensioni pari a 1
+                mu_y.data = mu_y.data / mu_y.data.norm() # ri-normalizza
+                self.exemplar_centroids.append(mu_y) # inserisce il centroide nella lista di centroidi
         
         return self.exemplar_centroids
     
@@ -113,8 +112,8 @@ class Icarl():
         
         with torch.no_grad():
             features = net.feature_extractor(images) # (batch_size, feature_size)
-            for i in range(features.size(0)): # Normalize
-                features.data[i] = features.data[i] / features.data[i].norm()
+            for i in range(features.size(0)): 
+                features.data[i] = features.data[i] / features.data[i].norm() # Normalize
             features = features.unsqueeze(2) # (batch_size, feature_size, 1)
             features = features.expand_as(means) # (batch_size, feature_size, n_classes)
 
