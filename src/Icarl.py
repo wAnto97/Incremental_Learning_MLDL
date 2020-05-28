@@ -90,7 +90,7 @@ class Icarl():
             features = [] #lista contenente tutte le features map degli exemplars selezionati per la i-esima classe
             class_images = self.get_class_images(training_set,exemplar_class_set) # recupero le immagini degli exemplars attraverso gli indici precedentemente selezionati
             with torch.no_grad():
-                for img in exemplar_class_set:
+                for img in class_images:
                     img=img.unsqueeze(0) # re-shapa l'immagine in modo tale che la dimensione sia : 1x3x32x32
                     feature = net.feature_extractor(img.cuda()) #estrae la feature map
                     feature = feature.squeeze() # rimuove tutte le dimensioni pari a 1
@@ -105,6 +105,14 @@ class Icarl():
     
     
     def predict(self,images,net):
+        """
+        Args: 
+        - images: batch di immagini da predirre
+        - net : rete
+
+        Returns: 
+        - lista di predizioni per quel batch
+        """
         exemplar_means = self.exemplar_centroids
         means = torch.stack(exemplar_means) # (n_classes, feature_size)
         means = torch.stack([means] * len(images)) # (batch_size, n_classes, feature_size)
