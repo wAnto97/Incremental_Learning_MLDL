@@ -133,3 +133,29 @@ class MyCIFAR100():
     train_dataset = Subset(self, train_indexes + exemplar_indexes)
     
     return train_dataset
+
+
+  def get_train_val_exemplars(self,group,exemplars_matrix):
+    indexes = []
+    train_indexes = []
+    exemplar_indexes = []
+
+    for gr in range(group):
+      indexes += self.indexes_split[gr]
+      
+    train_indexes_tmp,val_indexes = train_test_split(indexes,test_size=0.1,\
+    stratify = [self.dataset.__getitem__(i)[1] for i in indexes],random_state=41)
+
+    for index in train_indexes_tmp:
+      label = self.target_transform(self.dataset.__getitem__(index)[1])
+      if(label >= (group-1)*self.n_classes_group):
+          train_indexes.append(index)
+
+
+    for i in range(len(exemplars_matrix)): # Flat map to retrieve all exemplars indexes
+      exemplar_indexes += exemplars_matrix[i]
+
+    train_dataset = Subset(self, train_indexes + exemplar_indexes)
+    val_dataset = Subset(self,val_indexes)
+    
+    return train_dataset,val_dataset
