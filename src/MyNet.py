@@ -17,7 +17,7 @@ class MyNet():
         prev_bias = copy.deepcopy(best_net.linear.bias)
         self.net.linear = nn.Linear(64,n_classes)
         self.net.linear.weight.data = torch.cat((prev_weights,init_weights))
-        self.net.linear.bias.data = torch.cat((prev_bias,self.net.linear.bias.data[:- self.batch_classes]))
+        self.net.linear.bias.data[:n_classes-self.batch_classes] = prev_bias
 
         return prev_net,self.net
 
