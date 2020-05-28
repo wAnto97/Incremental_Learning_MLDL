@@ -9,12 +9,15 @@ class MyNet():
         self.net = resnet32()
         self.net.linear = nn.Linear(64,n_classes)
         self.init_weights = torch.nn.init.kaiming_normal_(self.net.linear.weight)
+        self.batch_classes = 10
     
     def update_network(self,best_net,n_classes,init_weights):
         prev_net = copy.deepcopy(best_net)
         prev_weights = copy.deepcopy(best_net.linear.weight)
+        prev_bias = copy.deepcopy(best_net.linear.bias)
         self.net.linear = nn.Linear(64,n_classes)
-        self.net.linear.weight.data = torch.cat((prev_weights,init_weights))
+        self.net.linear.weight.data[:n_classes-self.batch_classes] = prev_weights
+        self.net.linear.bias.data[:n_classes-self.batch_classes] = prev_bias
 
         return prev_net,self.net
 
