@@ -6,7 +6,7 @@ import torch.optim as optim
 
 class MyNet():
     def __init__(self,n_classes):
-        self.net = resnet32()
+        self.net = resnet32(num_classes=10)
         self.net.linear = nn.Linear(64,n_classes)
         self.init_weights = torch.nn.init.kaiming_normal_(self.net.linear.weight)
         self.batch_classes = 10
