@@ -23,7 +23,7 @@ class Icarl():
         m=int(self.K/(n_old_classes + n_classes))
         print('Build:',m)
         for i in range(n_classes):
-            self.exemplar_set.append(self.construct_exemplar_class_set(net,images_indices[i],m))
+            self.exemplar_set.append(self.random_exemplar_set(net,images_indices[i],m))
 
         return self.exemplar_set
     
