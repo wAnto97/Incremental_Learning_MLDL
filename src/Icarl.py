@@ -53,6 +53,7 @@ class Icarl():
         features = []
         with torch.no_grad():
             for img,_ in images_indices:
+                net.train(False)
                 img=img.unsqueeze(0) # re-shapa l'immagine in modo tale che la dimensione sia : 1x3x32x32
                 feature = net.feature_extractor(img.cuda()).data.cpu().numpy() # estrae la feature map di dimensione 64
                 feature = feature / np.linalg.norm(feature) # Normalizza la feature map
@@ -105,6 +106,7 @@ class Icarl():
             class_images = self.get_class_images(training_set,exemplar_class_set) # recupero le immagini degli exemplars attraverso gli indici precedentemente selezionati
             with torch.no_grad():
                 for img in class_images:
+                    net.train(False)
                     img=img.unsqueeze(0) # re-shapa l'immagine in modo tale che la dimensione sia : 1x3x32x32
                     feature = net.feature_extractor(img.cuda()) #estrae la feature map
                     feature = feature.squeeze() # rimuove tutte le dimensioni pari a 1
@@ -133,6 +135,7 @@ class Icarl():
         means = means.transpose(1, 2) # (batch_size, feature_size, n_classes)
         
         with torch.no_grad():
+            net.train(False)
             features = net.feature_extractor(images) # (batch_size, feature_size)
             for i in range(features.size(0)): 
                 features.data[i] = features.data[i] / features.data[i].norm() # Normalize
