@@ -123,6 +123,7 @@ class Icarl():
             features=[]
             class_images = current_data[i]
             with torch.no_grad():
+                print("LEN : ",len(class_images))
                 for img,_ in class_images:
                     net.train(False)
                     img=img.unsqueeze(0) # re-shapa l'immagine in modo tale che la dimensione sia : 1x3x32x32
