@@ -123,7 +123,7 @@ class Icarl():
             features=[]
             class_images = current_data[i]
             with torch.no_grad():
-                for img in class_images:
+                for img,_ in class_images:
                     net.train(False)
                     img=img.unsqueeze(0) # re-shapa l'immagine in modo tale che la dimensione sia : 1x3x32x32
                     feature = net.feature_extractor(img.cuda()) #estrae la feature map
