@@ -187,7 +187,7 @@ class Icarl():
     def compute_loss_L2(self,old_outputs,new_output,labels,step,n_classes,current_step,utils):
             sigmoid = nn.Sigmoid()
             n_old_classes = n_classes*(step-1)
-            clf_criterion = nn.MSELoss()
+            clf_criterion = nn.BCELoss()
             dist_criterion = nn.MSELoss()
             
             if step == 1 or current_step==-1:
