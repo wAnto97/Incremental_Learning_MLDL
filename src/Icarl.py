@@ -106,6 +106,7 @@ class Icarl():
             features = [] #lista contenente tutte le features map degli exemplars selezionati per la i-esima classe
             class_images = self.get_class_images(training_set,exemplar_class_set) # recupero le immagini degli exemplars attraverso gli indici precedentemente selezionati
             with torch.no_grad():
+                print("LEN : ",len(class_images))
                 for img in class_images:
                     net.train(False)
                     img=img.unsqueeze(0) # re-shapa l'immagine in modo tale che la dimensione sia : 1x3x32x32
