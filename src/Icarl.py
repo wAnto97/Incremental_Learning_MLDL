@@ -92,7 +92,7 @@ class Icarl():
         
         return class_images
     
-    def compute_centroids(self,net,training_set):
+    def compute_centroids(self,net,training_set,current_data,n_old_classes,n_classes=10):
         """
         Args: 
         -net : rete
@@ -102,7 +102,7 @@ class Icarl():
         - lista di centroidi già normalizzati due volte
         """
         self.exemplar_centroids=[]
-        for exemplar_class_set in self.exemplar_set:
+        for exemplar_class_set in self.exemplar_set[:n_old_classes]:
             features = [] #lista contenente tutte le features map degli exemplars selezionati per la i-esima classe
             class_images = self.get_class_images(training_set,exemplar_class_set) # recupero le immagini degli exemplars attraverso gli indici precedentemente selezionati
             with torch.no_grad():
@@ -117,6 +117,23 @@ class Icarl():
                 mu_y = features.mean(0).squeeze() #calcola il centroide e rimuove tutte le dimensioni pari a 1
                 mu_y.data = mu_y.data / mu_y.data.norm() # ri-normalizza
                 self.exemplar_centroids.append(mu_y) # inserisce il centroide nella lista di centroidi
+        
+
+        for i in range(n_classes):
+            features=[]
+            class_images = current_data[i]
+            with torch.no_grad():
+                for img in class_images:
+                    net.train(False)
+                    img=img.unsqueeze(0) # re-shapa l'immagine in modo tale che la dimensione sia : 1x3x32x32
+                    feature = net.feature_extractor(img.cuda()) #estrae la feature map
+                    feature = feature.squeeze() # rimuove tutte le dimensioni pari a 1
+                    feature.data = feature.data / feature.data.norm() # Normalizza
+                    features.append(feature) 
+                features = torch.stack(features) 
+                mu_y = features.mean(0).squeeze() #calcola il centroide e rimuove tutte le dimensioni pari a 1
+                mu_y.data = mu_y.data / mu_y.data.norm() # ri-normalizza
+                self.exemplar_centroids.append(mu_y) # inserisce il centroide nella lista di centroidis
         
         return self.exemplar_centroids
     
