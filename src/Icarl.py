@@ -37,7 +37,7 @@ class Icarl():
 
     def random_exemplar_set(self,net,images_indices,m):
         exemplar_class_set = []
-        indices = [img_ind[1] for img_ind in images_indices]
+        indices = [img_ind[1].item() for img_ind in images_indices]
         exemplar_class_set = random.sample(indices,m)
         return exemplar_class_set
 
