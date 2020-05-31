@@ -153,7 +153,7 @@ class ResNet(nn.Module):
         x = x.view(x.size(0), -1)
         x = x/x.norm()
         norm_weights = (self.linear.weight.data/self.linear.weight.data.norm()).cuda()
-        x = F.linear(x,norm_weights,self.linear.bias)
+        x = F.linear(x,norm_weights,self.linear.bias.data/self.linear.bias.data.norm())
 
         return x
 
