@@ -143,7 +143,7 @@ class ResNet(nn.Module):
     def forward_cosine(self, x):
         x = self.conv1(x)
         x = self.bn1(x)
-        # x = self.relu(x)
+        x = self.relu(x)
 
         x = self.layer1(x)
         x = self.layer2(x)
@@ -175,7 +175,7 @@ class ResNet(nn.Module):
         def feature_extractor_cosine(self, x):
             x = self.conv1(x)
             x = self.bn1(x)
-            # x = self.relu(x)
+            x = self.relu(x)
 
             x = self.layer1(x)
             x = self.layer2(x)
