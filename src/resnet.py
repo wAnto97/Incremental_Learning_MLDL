@@ -1,6 +1,7 @@
 import torch.nn as nn
 import math
 import torch.utils.model_zoo as model_zoo
+import torch.nn.functional as F
 
 """
 Credits to @hshustc
@@ -139,6 +140,23 @@ class ResNet(nn.Module):
 
         return x
 
+    def forward_cosine(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
+
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = self.layer3(x)
+
+        x = self.avgpool(x)
+        x = x.view(x.size(0), -1)
+        x = x/x.norm()
+        norm_weights = (self.linear.weight.data/self.linear.weight.data.norm()).cuda()
+        x = F.linear(x,norm_weights,self.linear.weight.bias)
+
+        return x
+
     def feature_extractor(self, x):
         x = self.conv1(x)
         x = self.bn1(x)
@@ -150,7 +168,24 @@ class ResNet(nn.Module):
 
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
+        x = x/x.norm()
+
         return x
+
+        def feature_extractor_cosine(self, x):
+            x = self.conv1(x)
+            x = self.bn1(x)
+            x = self.relu(x)
+
+            x = self.layer1(x)
+            x = self.layer2(x)
+            x = self.layer3(x)
+
+            x = self.avgpool(x)
+            x = x.view(x.size(0), -1)
+            x = x/x.norm()
+            
+            return x
 
 def resnet20(pretrained=False, **kwargs):
     n = 3
