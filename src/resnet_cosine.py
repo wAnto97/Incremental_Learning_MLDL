@@ -136,8 +136,8 @@ class ResNet(nn.Module):
 
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
-        x = x/x.norm()
-        norm_weights = (self.linear.weight.data/self.linear.weight.data.norm()).cuda()
+        x = F.normalize(x)
+        norm_weights = F.normalize(self.linear.weight.data)
         x = F.linear(x,norm_weights,self.linear.bias.data)
 
         return x
