@@ -116,12 +116,12 @@ class Utils():
         return train_dataloader,test_dataloader
     
     def create_onehot(self,intLabel,num_classes):
-        onehot = torch.zeros(num_classes,requires_grad=True)
+        onehot = torch.zeros(num_classes)
         onehot[intLabel]=1
         return onehot.cuda()
 
     def one_hot_matrix(self,labels,n_classes):
-        matrix = torch.zeros((len(labels),n_classes),requires_grad = True)
+        matrix = torch.zeros((len(labels),n_classes))
         for index,y in enumerate(labels):
             matrix[index] = self.create_onehot(y,n_classes)
         return matrix.cuda()
