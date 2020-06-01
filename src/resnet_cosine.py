@@ -136,11 +136,11 @@ class ResNet(nn.Module):
 
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
-        x = self.linear(x)
+        x = x/x.norm()
+        norm_weights = (self.linear.weight.data/self.linear.weight.data.norm()).cuda()
+        x = F.linear(x,norm_weights,self.linear.bias.data/self.linear.bias.data.norm())
 
         return x
-
-
 
     def feature_extractor(self, x):
         x = self.conv1(x)

@@ -1,12 +1,17 @@
 from IncrementalLeraningMLDL.src.resnet import resnet32
+from IncrementalLeraningMLDL.src.resnet_cosine import resnet32 as resnet32_cosine
 import torch
 from torch import nn
 import copy
 import torch.optim as optim
 
 class MyNet():
-    def __init__(self,n_classes):
-        self.net = resnet32(num_classes=10)
+    def __init__(self,n_classes,type='normal'):
+        self.type = type
+        if(type == 'normal'):
+          self.net = resnet32(num_classes=10)
+        elif type == 'cosine':
+            self.net = resnet32_cosine()
         self.net.linear = nn.Linear(64,n_classes)
         self.init_weights = torch.nn.init.kaiming_normal_(self.net.linear.weight)
         self.batch_classes = 10
