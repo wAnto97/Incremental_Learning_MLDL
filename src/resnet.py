@@ -172,20 +172,20 @@ class ResNet(nn.Module):
 
         return x
 
-        def feature_extractor_cosine(self, x):
-            x = self.conv1(x)
-            x = self.bn1(x)
-            x = self.relu(x)
+    def feature_extractor_cosine(self, x):
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
 
-            x = self.layer1(x)
-            x = self.layer2(x)
-            x = self.layer3(x)
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = self.layer3(x)
 
-            x = self.avgpool(x)
-            x = x.view(x.size(0), -1)
-            x = x/x.norm()
-            
-            return x
+        x = self.avgpool(x)
+        x = x.view(x.size(0), -1)
+        x = x/x.norm()
+        
+        return x
 
 def resnet20(pretrained=False, **kwargs):
     n = 3
