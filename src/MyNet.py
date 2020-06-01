@@ -11,7 +11,7 @@ class MyNet():
         if(type == 'normal'):
           self.net = resnet32(num_classes=10)
         elif type == 'cosine':
-            self.net = resnet32_cosine()
+            self.net = resnet32_cosine(num_classes=10)
         self.net.linear = nn.Linear(64,n_classes)
         self.init_weights = torch.nn.init.kaiming_normal_(self.net.linear.weight)
         self.batch_classes = 10
