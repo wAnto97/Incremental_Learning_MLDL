@@ -2,7 +2,7 @@ import torch
 from torch import nn
 import sys
 from torch.nn import functional as F
-from IncrementalLeraning.src import Exemplars 
+from IncrementalLeraningMLDL.src import Exemplars 
 
 class Icarl(Exemplars):
     def __init__(self,K=2000):
