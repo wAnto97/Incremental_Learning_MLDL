@@ -17,11 +17,11 @@ class Exemplars():
 
         return self.exemplar_set
 
-    def build_exemplars_random(self,net,images_indices,n_old_classes,n_classes=10):            
+    def build_exemplars_random(self,images_indices,n_old_classes,n_classes=10):            
         m=int(self.K/(n_old_classes + n_classes))
         print('Build:',m)
         for i in range(n_classes):
-            self.exemplar_set.append(self.construct_random_exemplar_set(net,images_indices[i],m))
+            self.exemplar_set.append(self.construct_random_exemplar_set(images_indices[i],m))
 
         return self.exemplar_set
     
@@ -33,7 +33,7 @@ class Exemplars():
 
         print('Build:',m)
         for i in range(n_classes):
-            self.exemplar_set.append(self.construct_random_exemplar_set(net,images_indices[i],m))
+            self.exemplar_set.append(self.construct_random_exemplar_set(images_indices[i],m))
 
         return self.exemplar_set
 
