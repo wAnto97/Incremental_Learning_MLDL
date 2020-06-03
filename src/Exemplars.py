@@ -3,7 +3,7 @@ import torch
 import numpy as np
 
 class Exemplars():
-    def __init___(self,K=2000):
+    def __init___(self,K):
         self.exemplar_set=[]
         self.exemplar_centroids=[]
         self.K=K
