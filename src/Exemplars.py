@@ -1,6 +1,7 @@
 import random
 import torch
 import numpy as np
+import sys
 
 class Exemplars():
     def __init__(self,K=2000):
@@ -35,7 +36,7 @@ class Exemplars():
             self.exemplar_set.append(self.construct_random_exemplar_set(net,images_indices[i],m))
 
         return self.exemplar_set
-            
+
     def reduce_exemplars(self,n_old_classes,n_classes=10):
         m = int(self.K/(n_old_classes+n_classes))
         print('Reduced:',m)
@@ -52,7 +53,7 @@ class Exemplars():
         
         return self.exemplar_set
 
-    def construct_random_exemplar_set(self,net,images_indices,m):
+    def construct_random_exemplar_set(self,images_indices,m):
         exemplar_class_set = []
         indices = [img_ind[1].item() for img_ind in images_indices]
         exemplar_class_set = random.sample(indices,m)
