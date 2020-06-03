@@ -2,11 +2,11 @@ import torch
 from torch import nn
 import sys
 from torch.nn import functional as F
-from IncrementalLeraningMLDL.src.Exemplars import Exemplars
+from IncrementalLeraning.src import Exemplars 
 
 class Icarl(Exemplars):
     def __init__(self,K=2000):
-       super().__init__()
+       super(Icarl,self).__init__(K)
        
     def predict(self,images,net):
         """
