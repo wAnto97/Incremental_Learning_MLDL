@@ -1,5 +1,5 @@
 class Analysis():
-    def __init__():
+    def __init__(self):
         pass
 
     def util_plots(self,confusion_matrices):
@@ -28,24 +28,24 @@ class Analysis():
 
             for i in range(len(current_matrix)): 
                 if step == 0:
-                sum_true_new += current_matrix[i][i]
-                sum_batch += current_matrix[i][i]
-                count += 1
+                    sum_true_new += current_matrix[i][i]
+                    sum_batch += current_matrix[i][i]
+                    count += 1
 
                 if step > 0 and i < (len(current_matrix)-10):
-                sum_true_previous += current_matrix[i][i]
-                sum_batch += current_matrix[i][i]
-                count += 1
+                    sum_true_previous += current_matrix[i][i]
+                    sum_batch += current_matrix[i][i]
+                    count += 1
 
                 if step > 0 and i >= (len(current_matrix)-10):
-                sum_true_new += current_matrix[i][i]
-                sum_batch += current_matrix[i][i]
-                count +=1
+                    sum_true_new += current_matrix[i][i]
+                    sum_batch += current_matrix[i][i]
+                    count +=1
 
                 if ((i+1) % classes_for_batch) == 0:
-                b = int(((i+1) / classes_for_batch)-1)
-                batches_accuracies[b].append((100*sum_batch)/n_sample)
-                sum_batch = 0
+                    b = int(((i+1) / classes_for_batch)-1)
+                    batches_accuracies[b].append((100*sum_batch)/n_sample)
+                    sum_batch = 0
 
 
             new_accuracies.append(100*(sum_true_new/n_sample))
@@ -65,7 +65,7 @@ class Analysis():
                 x_gaps.append(10*(step+1))
 
         for i in range(1, len(new_accuracies)):
-        gaps_new_classes.append(100*(new_accuracies[i] / 100))
+            gaps_new_classes.append(100*(new_accuracies[i] / 100))
 
         fig, ax = plt.subplots(figsize=(6,5))
 
@@ -116,8 +116,7 @@ class Analysis():
         fig, ax = plt.subplots(figsize=(12,10))
 
         for i in range(10):#len(batches_accuracies)):
-
-        ax.plot(n_classes, batches_accuracies[i], marker ='o', label = f'Accuracy batch {i}')
+            ax.plot(n_classes, batches_accuracies[i], marker ='o', label = f'Accuracy batch {i}')
 
         ax.legend()
         plt.xlabel('N Classes')
