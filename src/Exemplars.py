@@ -6,7 +6,7 @@ class Exemplars():
     def __init___(self,K=2000):
         self.exemplar_set=[]
         self.exemplar_centroids=[]
-        self.K=2000
+        self.K=K
     
     def build_exemplars_herding(self,net,images_indices,n_old_classes,n_classes=10):            
         m=int(self.K/(n_old_classes + n_classes))
