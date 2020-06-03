@@ -52,7 +52,7 @@ class MyNet():
         return self.net
 
     def unfreeze_conv(self):
-        for i,child in enumerate(net.children()):
+        for i,child in enumerate(self.net.children()):
             if(i==5):
                 break
             for param in child.parameters():
