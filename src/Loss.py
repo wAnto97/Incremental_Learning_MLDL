@@ -42,7 +42,7 @@ class Loss():
 
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
     
-    def abs_log_loss(self,old_outputs,new_output,labels,step,n_classes,current_step,utils):
+    def abs_log_loss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
         sigmoid = nn.Sigmoid()
         n_old_classes = n_classes*(step-1)
         clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
@@ -60,7 +60,7 @@ class Loss():
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
     
     
-    def abs_log_loss2(self,old_outputs,new_output,labels,step,n_classes,current_step,utils):
+    def abs_log_loss2(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
         sigmoid = nn.Sigmoid()
         n_old_classes = n_classes*(step-1)
         clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
@@ -80,7 +80,7 @@ class Loss():
         return tot_loss,clf_loss*1/step,(0.5*dist_loss + 0.5*dist_2_loss)*(step-1)/step
 
 
-    def MMLoss(self,old_outputs,new_output,labels,step,n_classes,current_step,utils):
+    def MMLoss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
         sigmoid = nn.Sigmoid()
         n_old_classes = n_classes*(step-1)
         
@@ -99,7 +99,7 @@ class Loss():
         tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
-    def MMLoss_onlydist(self,old_outputs,new_output,labels,step,n_classes,current_step,utils):
+    def MMLoss_onlydist(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
         sigmoid = nn.Sigmoid()
         n_old_classes = n_classes*(step-1)
         clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
@@ -115,7 +115,7 @@ class Loss():
         tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
-    def MMLoss_CE(self,old_outputs,new_output,labels,step,n_classes,current_step,utils):
+    def MMLoss_CE(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
         sigmoid = nn.Sigmoid()
         n_old_classes = n_classes*(step-1)
         clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
@@ -134,7 +134,7 @@ class Loss():
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
 
-    def hybrid_loss(self,old_outputs,new_output,labels,step,n_classes,current_step,utils):
+    def hybrid_loss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
         sigmoid = nn.Sigmoid()
         n_old_classes = n_classes*(step-1)
         clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
@@ -154,7 +154,7 @@ class Loss():
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
 
-    def BCE_by_hand(self,old_outputs,new_output,labels,step,n_classes,current_step,utils):
+    def BCE_by_hand(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
         sigmoid = nn.Sigmoid()
         EPS = 3.720076e-44
         n_old_classes = n_classes*(step-1)
