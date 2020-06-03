@@ -6,7 +6,7 @@ from IncrementalLeraningMLDL.src.Exemplars import Exemplars
 
 class Icarl(Exemplars):
     def __init__(self,K=2000):
-       super().__init__(K)
+       super().__init__()
        
     def predict(self,images,net):
         """
