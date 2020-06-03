@@ -15,16 +15,22 @@ class MyNet():
         self.net.linear = nn.Linear(64,n_classes)
         self.init_weights = torch.nn.init.kaiming_normal_(self.net.linear.weight)
         self.batch_classes = 10
+        self.prev_net = None
     
     def update_network(self,best_net,n_classes,init_weights):
-        prev_net = copy.deepcopy(best_net)
+        self.prev_net = copy.deepcopy(best_net)
         prev_weights = copy.deepcopy(best_net.linear.weight)
         prev_bias = copy.deepcopy(best_net.linear.bias)
         self.net.linear = nn.Linear(64,n_classes)
         self.net.linear.weight.data[:n_classes-self.batch_classes] = prev_weights
         self.net.linear.bias.data[:n_classes-self.batch_classes] = prev_bias
 
-        return prev_net,self.net
+        return self.prev_net,self.net
+
+    def get_old_outputs(self,images,labels):
+        self.prev_net.train(False)
+        output = self.prev_net(images.cuda())
+        return output
 
     def prepare_training(self,LR,MOMENTUM,WEIGHT_DECAY,STEP_SIZE,GAMMA,typeScheduler):    
         parameters_to_optimize = self.net.parameters()
