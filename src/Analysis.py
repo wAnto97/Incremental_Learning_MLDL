@@ -1,3 +1,6 @@
+from matplotlib import pyplot as plt
+import numpy as np
+import math
 class Analysis():
     def __init__(self):
         pass
