@@ -16,53 +16,53 @@ class Analysis():
         n_classes = []
 
         for step in range(len(confusion_matrices)):
-        count = 0
-        sum_true_previous = 0
-        sum_true_new = 0
-        sum_batch = 0
-        tot = n_sample *(step)
-        current_matrix = confusion_matrices[step]
-        batches_accuracies.append([])
-        for el in range(step):
-            batches_accuracies[step].append(None)
-
-        for i in range(len(current_matrix)): 
-            if step == 0:
-            sum_true_new += current_matrix[i][i]
-            sum_batch += current_matrix[i][i]
-            count += 1
-
-            if step > 0 and i < (len(current_matrix)-10):
-            sum_true_previous += current_matrix[i][i]
-            sum_batch += current_matrix[i][i]
-            count += 1
-
-            if step > 0 and i >= (len(current_matrix)-10):
-            sum_true_new += current_matrix[i][i]
-            sum_batch += current_matrix[i][i]
-            count +=1
-
-            if ((i+1) % classes_for_batch) == 0:
-            b = int(((i+1) / classes_for_batch)-1)
-            batches_accuracies[b].append((100*sum_batch)/n_sample)
+            count = 0
+            sum_true_previous = 0
+            sum_true_new = 0
             sum_batch = 0
+            tot = n_sample *(step)
+            current_matrix = confusion_matrices[step]
+            batches_accuracies.append([])
+            for el in range(step):
+                batches_accuracies[step].append(None)
+
+            for i in range(len(current_matrix)): 
+                if step == 0:
+                sum_true_new += current_matrix[i][i]
+                sum_batch += current_matrix[i][i]
+                count += 1
+
+                if step > 0 and i < (len(current_matrix)-10):
+                sum_true_previous += current_matrix[i][i]
+                sum_batch += current_matrix[i][i]
+                count += 1
+
+                if step > 0 and i >= (len(current_matrix)-10):
+                sum_true_new += current_matrix[i][i]
+                sum_batch += current_matrix[i][i]
+                count +=1
+
+                if ((i+1) % classes_for_batch) == 0:
+                b = int(((i+1) / classes_for_batch)-1)
+                batches_accuracies[b].append((100*sum_batch)/n_sample)
+                sum_batch = 0
 
 
-        new_accuracies.append(100*(sum_true_new/n_sample))
-        total_accuracies.append(100*((sum_true_previous + sum_true_new)/(tot + n_sample)))
-        n_classes.append(10*(step+1))
-        
-        if step > 0:
-            previous_accuracies.append(100*(sum_true_previous/tot))
-            #gaps_old_classes.append(total_accuracies[step - 1] - previous_accuracies[step])
-            gaps_old_classes.append(100*(previous_accuracies[step] / total_accuracies[step - 1]))
-            gaps.append(previous_accuracies[step])
-            gaps.append(total_accuracies[step])
-            x_gaps.append(10*(step+1))
-            x_gaps.append(10*(step+1))
-        else:
-            gaps.append(total_accuracies[step])
-            x_gaps.append(10*(step+1))
+            new_accuracies.append(100*(sum_true_new/n_sample))
+            total_accuracies.append(100*((sum_true_previous + sum_true_new)/(tot + n_sample)))
+            n_classes.append(10*(step+1))
+            
+            if step > 0:
+                previous_accuracies.append(100*(sum_true_previous/tot))
+                #gaps_old_classes.append(total_accuracies[step - 1] - previous_accuracies[step])
+                gaps_old_classes.append(100*(previous_accuracies[step] / total_accuracies[step - 1]))
+                gaps.append(previous_accuracies[step])
+                gaps.append(total_accuracies[step])
+                x_gaps.append(10*(step+1))
+                x_gaps.append(10*(step+1))
+            else:
+                gaps.append(total_accuracies[step])
+                x_gaps.append(10*(step+1))
 
         for i in range(1, len(new_accuracies)):
         gaps_new_classes.append(100*(new_accuracies[i] / 100))
