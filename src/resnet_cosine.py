@@ -155,7 +155,7 @@ class ResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def forward(self, x,clf=True):
+    def forward(self, x):
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)
@@ -165,14 +165,13 @@ class ResNet(nn.Module):
         x = self.layer3(x)
 
         x = self.avgpool(x)
-        x = x.view(x.size(0), -1)
-        
-        if(clf == True):
-            x = F.normalize(x)
-            norm_weights = F.normalize(self.linear.weight.data)
-            x = F.linear(x,norm_weights.data,self.linear.bias.data)
+        feature_map = x.view(x.size(0), -1)
 
-        return x
+        x = F.normalize(feature_map)
+        norm_weights = F.normalize(self.linear.weight.data)
+        x = F.linear(x,norm_weights.data,self.linear.bias.data)
+
+        return feature_map,x
 
     def feature_extractor(self, x):
         x = self.conv1(x)
