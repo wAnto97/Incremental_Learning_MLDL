@@ -36,6 +36,18 @@ class Exemplars():
             self.exemplar_set.append(self.construct_random_exemplar_set(images_indices[i],m))
 
         return self.exemplar_set
+    
+    def build_exemplars_random_notuniform_2(self,images_indices,n_old_classes,n_classes=10):            
+        if n_old_classes >= 40:
+          m = int(((1 - ((n_old_classes+n_classes - 40)/10)*0.11) / 4)*(self.K/10)) 
+        else:
+          m = int(self.K/(n_old_classes+n_classes))
+        
+        print('Build:',m)
+        for i in range(n_classes):
+            self.exemplar_set.append(self.construct_random_exemplar_set(images_indices[i],m))
+
+        return self.exemplar_set
 
     def reduce_exemplars(self,n_old_classes,n_classes=10):
         m = int(self.K/(n_old_classes+n_classes))
@@ -50,6 +62,22 @@ class Exemplars():
         print('Reduced:',m)
         for i in range(len(self.exemplar_set)):
             self.exemplar_set[i]=self.exemplar_set[i][:m]
+        
+        return self.exemplar_set
+
+    def reduce_exemplars_notuniform_2(self,n_old_classes,n_classes=10):
+        if n_old_classes >= 40:
+          m = int(((1 - ((n_old_classes+n_classes - 40)/10)*0.11) / 4)*(self.K/10)) 
+        else:
+          m = int(self.K/(n_old_classes+n_classes))
+        print('Reduced:',m)
+        for i in range(len(self.exemplar_set)):
+          if n_old_classes >= 40:
+            if i>=20 and i < (n_old_classes+n_classes - 20):
+              m_2 = int(0.11 * (self.K / 10))
+              self.exemplar_set[i]=self.exemplar_set[i][:m_2]
+            else:
+              self.exemplar_set[i]=self.exemplar_set[i][:m]
         
         return self.exemplar_set
 
