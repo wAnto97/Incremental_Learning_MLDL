@@ -140,9 +140,9 @@ class Analysis():
     def plotConfMatrix(self,confusion_matrix,title):
         fig,ax=plt.subplots(figsize=(7,5))
         sns.heatmap(confusion_matrix,cmap='terrain',ax=ax)
+        plt.axis('off')
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
-        plt.axis('off')
         plt.title(title)
         plt.show()
 
