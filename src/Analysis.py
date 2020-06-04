@@ -148,7 +148,7 @@ class Analysis():
         markers = ['^','o','x','+','D','*']
         colors = ['green','darkblue','orange','grey','black','purple']
 
-        fig,ax = plt.subplots(figsize=(7,5))
+        fig,ax = plt.subplots(figsize=(12,8))
         for index,(acc,label) in enumerate(zip(accuracies,labels)):
             ax.plot(np.arange(10,110, 10),acc,marker=markers[index],color=colors[index],label=label)
 
