@@ -5,7 +5,7 @@ class Loss():
         pass
     
     def icarl_loss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
-       '''BCE loss. Citata nel paper di iCarl'''
+        '''BCE loss. Citata nel paper di iCarl'''
 
         sigmoid = nn.Sigmoid()
         n_old_classes = n_classes*(step-1)
@@ -120,7 +120,7 @@ class Loss():
 
 
     def MMLoss_bounded(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
-       '''
+        '''
         Combinazione lineare tra la loss polinomiale 'custom' e una BCE, con coefficienti 0.9*MM + 0.1*BCE
         Stesse caratteristiche della MMLoss, ma la funzione è limitata tra 0 e 1 come la BCE loss.
         Il comportamento rimane lo stesso della MM loss, quindi è sconveniente utilizzare questa (solo formalità)
