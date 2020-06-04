@@ -37,7 +37,7 @@ class Loss():
         clf_loss = clf_criterion(new_output,labels)
 
         lambda_dist = lambda_base*((n_classes/n_old_classes)**0.5)
-        dist_loss = cosine_loss(new_features, old_outputs,torch.ones(batch_size).cuda()) 
+        dist_loss = 0.5*cosine_loss(new_features, old_outputs,torch.ones(batch_size).cuda()) 
 
 
         return clf_loss + dist_loss
