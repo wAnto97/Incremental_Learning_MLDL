@@ -1,6 +1,10 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import math
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+
+
 class Analysis():
     def __init__(self):
         pass
@@ -130,3 +134,45 @@ class Analysis():
         plt.tight_layout()
         plt.grid()
         plt.show()
+
+    def plotConfMatrix(self,confusion_matrix):
+        fig,ax=plt.subplots(figsize=(7,5))
+        sns.heatmap(confusion_matrix,cmap='terrain',ax=ax)
+        plt.ylabel('True label')
+        plt.xlabel('Predicted label')
+        plt.show()
+
+# from src.Utils import Utils
+# import matplotlib.pyplot as plt
+# import numpy as np
+
+# fig,ax = plt.subplots(figsize=(7,5))
+# utils = Utils()
+# data = utils.readFileMetrics('./results/iCarl/iCarlMetrics.json',cm = True)
+# ax.plot(np.arange(10,110, 10),data['accuracy_test_per_group'],marker='^',color='green')
+# plt.ylabel('Accuracy')
+# plt.xlabel('n_classes')
+# plt.title('LwF on plateau')
+# # plt.ylim([0,1])
+# # plt.grid(ydata=np.arange(0,1,0.01))
+# major_ticks = np.arange(0, 1.1, 0.1)
+# minor_ticks = np.arange(0, 1, 0.02)
+
+# accs = [0.853, 0.756,0.6956666666666667,0.63625,0.5786,0.532,0.508,0.481125,0.44733333333333336,0.4185]
+# ax.plot(np.arange(10,110, 10),accs,marker='^',color='darkblue')
+# plt.ylabel('Accuracy')
+# plt.xlabel('n_classes')
+# plt.title('LwF on plateau')
+# # plt.ylim([0,1])
+# # plt.grid(ydata=np.arange(0,1,0.01))
+
+# major_ticks = np.arange(0, 1.1, 0.1)
+# minor_ticks = np.arange(0, 1, 0.02)
+# ax.set_yticks(major_ticks)
+# ax.set_yticks(minor_ticks, minor=True)
+# ax.set_xticks(np.arange(10,110,10))
+# ax.set_xlim(xmin=9,xmax=101)
+# plt.legend(['iCarl1','iCarl2'])
+# ax.grid(axis='y')
+
+
