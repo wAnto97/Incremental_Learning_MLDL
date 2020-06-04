@@ -31,6 +31,11 @@ class MyNet():
         self.prev_net.train(False)
         output = self.prev_net(images.cuda())
         return output
+    
+    def get_old_features_cosine(self,images,labels):
+        self.prev_net.train(False)
+        feature_map,_ = self.prev_net(images)
+        return feature_map
 
     def prepare_training(self,LR,MOMENTUM,WEIGHT_DECAY,STEP_SIZE,GAMMA,typeScheduler):    
         parameters_to_optimize = self.net.parameters()

@@ -24,6 +24,22 @@ class Loss():
 
 
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
+    def LfG_loss(self,old_outputs,new_features,new_output,labels,step,current_step,utils,lambda_base = 5,n_classes=10,batch_size=128):
+        n_old_classes = n_classes*(step-1)
+        clf_criterion = nn.CrossEntropyLoss(reduction = 'mean')
+        cosine_loss = nn.CosineEmbeddingLoss(reduction='mean')
+        if step == 1 or current_step==-1:
+            clf_loss = clf_criterion(new_output,labels)
+            return clf_loss
+            
+        clf_loss = clf_criterion(new_output,labels)
+
+        lambda_dist = lambda_base*((n_classes/n_old_classes)**0.5)
+        dist_loss = cosine_loss(new_features, old_outputs,torch.ones(BATCH_SIZE).cuda()) 
+
+
+        return clf_loss + dist_loss
+
 
     def L2_loss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
         '''MSE loss. Comportamento peggiore rispetto alla BCE (influenzato dalla scelta di parametri non ottimali).'''
