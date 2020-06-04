@@ -5,7 +5,7 @@ class Analysis():
     def __init__(self):
         pass
 
-    def util_plots(self,confusion_matrices):
+    def useful_plots(self,confusion_matrices):
         n_sample = 1000
         classes_for_batch = 10
         previous_accuracies = [None]
