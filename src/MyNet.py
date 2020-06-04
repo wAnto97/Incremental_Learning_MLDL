@@ -29,7 +29,7 @@ class MyNet():
 
     def get_old_outputs(self,images,labels):
         self.prev_net.train(False)
-        output = self.prev_net(images.cuda())
+        output = self.prev_net(images)
         return output
     
     def get_old_features_cosine(self,images,labels):
