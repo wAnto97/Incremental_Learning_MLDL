@@ -146,7 +146,7 @@ class Analysis():
         plt.xlabel('Predicted label')
         plt.show()
 
-    def plotAccTrendComparison(accuracies,labels):
+    def plotAccTrendComparison(self,accuracies,labels):
         markers = ['^','o','x','+','D','*']
         colors = ['green','darkblue','orange','grey','black','purple']
 
