@@ -74,7 +74,7 @@ class Loss():
         tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
-    def MMLoss_onlydist(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10, w=1/3):
+    def MMLoss_onlydist(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10, w=1/4):
         '''
         w serve ad allineare i contributi di classification e distillation in modo tale che abbiano pendenze e learning rate simili.
         senza questo fattore la distillation avrebbe un peso molto maggiore rispetto alla clf. se si usa la BCE impostare w=1/4 (o 1/3)
