@@ -17,7 +17,7 @@ class Exemplars():
 
         return self.exemplar_set
 
-    def build_exemplars_random(self,images_indices,n_old_classes,n_classes=10):            
+    def build_exemplars_random(self,images_indices,n_old_classes,step,n_classes=10):            
         m=int(self.K/(n_old_classes + n_classes))
         print('Build:',m)
         for i in range(n_classes):
@@ -25,7 +25,7 @@ class Exemplars():
 
         return self.exemplar_set
     
-    def build_exemplars_random_notuniform(self,net,images_indices,n_old_classes,step,n_classes=10):
+    def build_exemplars_random_notuniform(self,images_indices,n_old_classes,step,n_classes=10):
         if step==1:
             m=int(self.K/n_classes)
         else:
@@ -37,7 +37,7 @@ class Exemplars():
 
         return self.exemplar_set
     
-    def build_exemplars_random_notuniform_2(self,images_indices,n_old_classes,n_classes=10):            
+    def build_exemplars_random_notuniform_2(self,images_indices,n_old_classes,step,n_classes=10):            
         if n_old_classes >= 40:
           m = int(((1 - ((n_old_classes+n_classes - 40)/10)*0.11) / 4)*(self.K/10)) 
         else:
@@ -78,6 +78,8 @@ class Exemplars():
               self.exemplar_set[i]=self.exemplar_set[i][:m_2]
             else:
               self.exemplar_set[i]=self.exemplar_set[i][:m]
+          else:
+            self.exemplar_set[i]=self.exemplar_set[i][:m]
         
         return self.exemplar_set
 
