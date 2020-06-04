@@ -137,11 +137,12 @@ class Analysis():
         plt.grid()
         plt.show()
 
-    def plotConfMatrix(self,confusion_matrix):
+    def plotConfMatrix(self,confusion_matrix,title):
         fig,ax=plt.subplots(figsize=(7,5))
-        sns.heatmap(confusion_matrix,cmap='coolwarm',ax=ax)
+        sns.heatmap(confusion_matrix,cmap='terrain',ax=ax)
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
+        plt.title(title)
         plt.show()
 
     def plotAccTrendComparison(self,accuracies,labels):
