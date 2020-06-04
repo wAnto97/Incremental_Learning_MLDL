@@ -4,6 +4,10 @@ import math
 from sklearn.metrics import confusion_matrix
 import seaborn as sns
 
+from src.Utils import Utils
+import matplotlib.pyplot as plt
+import numpy as np
+
 
 class Analysis():
     def __init__(self):
@@ -142,19 +146,37 @@ class Analysis():
         plt.xlabel('Predicted label')
         plt.show()
 
-# from src.Utils import Utils
-# import matplotlib.pyplot as plt
-# import numpy as np
+    def plotAccTrendComparison(accuracies,labels):
+        markers = ['^','o','x','+','D','*']
+        colors = ['green','darkblue','orange','grey','black','purple']
 
-# fig,ax = plt.subplots(figsize=(7,5))
+        for index,(acc,label) in enumerate(zip(accuracies,labels)):
+            fig,ax = plt.subplots(figsize=(7,5))
+            ax.plot(np.arange(10,110, 10),acc,marker=markers[i],color=colors[i],label=label)
+
+
+        plt.ylabel('Accuracy')
+        plt.xlabel('n_classes')
+        plt.title('Top-1 accuracy')
+        major_ticks = np.arange(0, 1.1, 0.1)
+        minor_ticks = np.arange(0, 1, 0.02)
+        ax.set_yticks(major_ticks)
+        ax.set_yticks(minor_ticks, minor=True)
+        ax.set_xticks(np.arange(10,110,10))
+        ax.set_xlim(xmin=9,xmax=101)
+        plt.legend()
+        ax.grid(axis='y')
+
+
+
 # utils = Utils()
 # data = utils.readFileMetrics('./results/iCarl/iCarlMetrics.json',cm = True)
 # ax.plot(np.arange(10,110, 10),data['accuracy_test_per_group'],marker='^',color='green')
 # plt.ylabel('Accuracy')
 # plt.xlabel('n_classes')
 # plt.title('LwF on plateau')
-# # plt.ylim([0,1])
-# # plt.grid(ydata=np.arange(0,1,0.01))
+# plt.ylim([0,1])
+# plt.grid(ydata=np.arange(0,1,0.01))
 # major_ticks = np.arange(0, 1.1, 0.1)
 # minor_ticks = np.arange(0, 1, 0.02)
 
@@ -166,13 +188,5 @@ class Analysis():
 # # plt.ylim([0,1])
 # # plt.grid(ydata=np.arange(0,1,0.01))
 
-# major_ticks = np.arange(0, 1.1, 0.1)
-# minor_ticks = np.arange(0, 1, 0.02)
-# ax.set_yticks(major_ticks)
-# ax.set_yticks(minor_ticks, minor=True)
-# ax.set_xticks(np.arange(10,110,10))
-# ax.set_xlim(xmin=9,xmax=101)
-# plt.legend(['iCarl1','iCarl2'])
-# ax.grid(axis='y')
 
 
