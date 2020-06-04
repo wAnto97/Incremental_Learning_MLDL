@@ -138,6 +138,9 @@ class Analysis():
         plt.show()
 
     def plotConfMatrix(self,confusion_matrix,title):
+        confusion_matrix = np.array(confusion_matrix)
+        confusion_matrix = np.transpose(confusion_matrix)
+        
         fig,ax=plt.subplots(figsize=(7,5))
         sns.heatmap(confusion_matrix,cmap='terrain',ax=ax)
         plt.axis('off')
