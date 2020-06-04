@@ -139,7 +139,7 @@ class Analysis():
 
     def plotConfMatrix(self,confusion_matrix):
         fig,ax=plt.subplots(figsize=(7,5))
-        sns.heatmap(confusion_matrix,cmap='terrain',ax=ax)
+        sns.heatmap(confusion_matrix,cmap='coolwarm',ax=ax)
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
         plt.show()
@@ -164,27 +164,3 @@ class Analysis():
         ax.set_xlim(xmin=9,xmax=101)
         plt.legend()
         ax.grid(axis='y')
-
-
-
-# utils = Utils()
-# data = utils.readFileMetrics('./results/iCarl/iCarlMetrics.json',cm = True)
-# ax.plot(np.arange(10,110, 10),data['accuracy_test_per_group'],marker='^',color='green')
-# plt.ylabel('Accuracy')
-# plt.xlabel('n_classes')
-# plt.title('LwF on plateau')
-# plt.ylim([0,1])
-# plt.grid(ydata=np.arange(0,1,0.01))
-# major_ticks = np.arange(0, 1.1, 0.1)
-# minor_ticks = np.arange(0, 1, 0.02)
-
-# accs = [0.853, 0.756,0.6956666666666667,0.63625,0.5786,0.532,0.508,0.481125,0.44733333333333336,0.4185]
-# ax.plot(np.arange(10,110, 10),accs,marker='^',color='darkblue')
-# plt.ylabel('Accuracy')
-# plt.xlabel('n_classes')
-# plt.title('LwF on plateau')
-# # plt.ylim([0,1])
-# # plt.grid(ydata=np.arange(0,1,0.01))
-
-
-
