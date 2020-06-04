@@ -14,7 +14,7 @@ class Icarl(Exemplars):
         Returns: 
         - lista di predizioni per quel batch
         """
-        exemplar_means = self.exemplar_centroids
+        exemplar_means = super.exemplar_centroids
         means = torch.stack(exemplar_means) # (n_classes, feature_size)
         means = torch.stack([means] * len(images)) # (batch_size, n_classes, feature_size)
         means = means.transpose(1, 2) # (batch_size, feature_size, n_classes)
