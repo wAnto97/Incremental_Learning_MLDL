@@ -1,6 +1,4 @@
 import torch
-import sys
-from torch.nn import functional as F
 from IncrementalLeraningMLDL.src.Exemplars import Exemplars 
 
 class Icarl(Exemplars):
