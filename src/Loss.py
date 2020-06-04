@@ -1,5 +1,7 @@
 from torch import nn
 import torch
+import numpy as np
+
 class Loss():
     def __init__(self):
         pass
@@ -72,20 +74,22 @@ class Loss():
         Comportamento: Favorisce la modifica di probabilità che al tempo 't-1' erano prossime a 0.5, 
         rispetto a quelle prossime a zero o uno
         '''
+        # WARNING: Usare MMLoss_onlydist
         sigmoid = nn.Sigmoid()
         n_old_classes = n_classes*(step-1)
+        w_clf = 3/160 # Peso inserito in modo tale che il Learning Rate sia sempre vicino a 2. Così è più semplice trovare i parametri esatti.
         
         if step == 1 or current_step==-1:
             y = utils.one_hot_matrix(labels,n_classes*step)
-            clf_loss = torch.mean(-w* (4*(2*y - 1).pow(3) * (2*sigmoid(new_output) - 1) - (2*sigmoid(new_output) - 1).pow(4) - 3))
+            clf_loss = torch.mean(-w_clf*(4*(2*y - 1).pow(3) * (2*sigmoid(new_output) - 1) - (2*sigmoid(new_output) - 1).pow(4) - 3))
             return clf_loss,clf_loss,clf_loss-clf_loss 
 
 
         y = utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:]
-        clf_loss = torch.mean(-w* (4*(2*y - 1).pow(3) * (2*sigmoid(new_output[:,n_old_classes:]) - 1) - (2*sigmoid(new_output[:,n_old_classes:]) - 1).pow(4) - 3))
+        clf_loss = torch.mean(-w_clf* (4*(2*y - 1).pow(3) * (2*sigmoid(new_output[:,n_old_classes:]) - 1) - (2*sigmoid(new_output[:,n_old_classes:]) - 1).pow(4) - 3))
        
         target = sigmoid(old_outputs)
-        dist_loss = torch.mean(-w* (4*(2*target - 1).pow(3) * (2*sigmoid(new_output[:,:n_old_classes]) - 1) - (2*sigmoid(new_output[:,:n_old_classes]) - 1).pow(4) - 3))
+        dist_loss = torch.mean(-w_clf* (4*(2*target - 1).pow(3) * (2*sigmoid(new_output[:,:n_old_classes]) - 1) - (2*sigmoid(new_output[:,:n_old_classes]) - 1).pow(4) - 3))
        
         tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
@@ -110,6 +114,29 @@ class Loss():
        
         tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
+
+
+    def MMLoss_onlydist_Prob(self,old_outputs,new_output,labels,step,current_step,utils, prob_vect,n_classes=10, w=1/4):
+        '''
+        Stessa di MM_onlydist, ma rimuove alcuni contributi di distillation, moltiplicando per un tensore random 
+        (con probabilità variabile) di 0 e 1
+        '''
+        sigmoid = nn.Sigmoid()
+        n_old_classes = n_classes*(step-1)
+        clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
+
+        if step == 1 or current_step==-1:
+            clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
+            return clf_loss,clf_loss,clf_loss-clf_loss
+
+        clf_loss = clf_criterion(new_output[:,n_old_classes:],utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:])
+        target = sigmoid(old_outputs)
+        
+        dist_loss = torch.mean(prob_vect.cuda() * (- w * (4*(2*target - 1).pow(3) * (2*sigmoid(new_output[:,:n_old_classes]) - 1) - (2*sigmoid(new_output[:,:n_old_classes]) - 1).pow(4) - 3)))
+       
+        tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
+        return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
+
 
     def MMLoss_CE(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10, w=1/4):
         '''
@@ -232,3 +259,5 @@ class Loss():
         tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
 
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
+
+
