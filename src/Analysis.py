@@ -142,6 +142,7 @@ class Analysis():
         sns.heatmap(confusion_matrix,cmap='terrain',ax=ax)
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
+        plt.axis('off')
         plt.title(title)
         plt.show()
 
