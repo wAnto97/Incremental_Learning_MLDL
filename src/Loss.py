@@ -144,7 +144,7 @@ class Loss():
 
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
- def abs_log_loss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
+    def abs_log_loss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
         '''
         Utilizza come termine di distillation una funzione con pendenza costante rispetto a p(t-1).
         Di conseguenza l'incremento della loss dovuto a un cambiamento del vettore di probabilità
