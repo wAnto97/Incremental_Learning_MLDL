@@ -46,7 +46,7 @@ class Loss():
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
 
-    def MMLoss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10), w=1/4:
+    def MMLoss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10, w=1/4):
         '''
         Funzione di loss polinomiale, ricavata seguendo criteri specificati all'interno del paper, con lo scopo
         di migliorare le performance della BCE loss e avere maggiore flessibilità. Essendo polinomiale, infatti,
