@@ -2,6 +2,7 @@ import torch.nn as nn
 import math
 import torch.utils.model_zoo as model_zoo
 import torch.nn.functional as F
+import torch
 
 """
 Credits to @hshustc
@@ -191,14 +192,14 @@ class ResNet(nn.Module):
 
         return x
 
-class CosineLinear(Module):
+class CosineLinear(nn.Module):
     def __init__(self, in_features, out_features, sigma=True):
         super(CosineLinear, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
-        self.weight = Parameter(torch.Tensor(out_features, in_features))
+        self.weight = nn.Parameter(torch.Tensor(out_features, in_features))
         if sigma:
-            self.sigma = Parameter(torch.Tensor(1))
+            self.sigma = nn.Parameter(torch.Tensor(1))
         else:
             self.register_parameter('sigma', None)
         self.reset_parameters()
