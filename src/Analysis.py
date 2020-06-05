@@ -151,7 +151,7 @@ class Analysis():
 
     def plotAccTrendComparison(self,accuracies,labels):
         markers = ['^','o','x','+','D','*','-']
-        colors = ['green','darkblue','orange','grey','black','purple','yellow']
+        colors = ['green','darkblue','orange','grey','black','purple','aqua']
 
         fig,ax = plt.subplots(figsize=(12,8))
         for index,(acc,label) in enumerate(zip(accuracies,labels)):
