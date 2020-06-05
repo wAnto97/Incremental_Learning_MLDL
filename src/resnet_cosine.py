@@ -116,6 +116,8 @@ class Bottleneck(nn.Module):
 
 
 class ResNet(nn.Module):
+    def eta(self):
+        return self.linear.sigma.data
 
     def __init__(self, block, layers, num_classes):
         self.inplanes = 16
@@ -128,7 +130,7 @@ class ResNet(nn.Module):
         self.layer2 = self._make_layer(block, 32, layers[1], stride=2)
         self.layer3 = self._make_layer(BasicBlockNoReLu, 64, layers[2], stride=2)
         self.avgpool = nn.AvgPool2d(8, stride=1)
-        self.linear = nn.Linear(64 * block.expansion, num_classes)
+        self.linear = CosineLinear(64 * block.expansion, num_classes)
         self.out_dim = 64 * block.expansion
 
         for m in self.modules():
@@ -167,9 +169,11 @@ class ResNet(nn.Module):
         x = self.avgpool(x)
         feature_map = x.view(x.size(0), -1)
 
-        x = F.normalize(feature_map)
-        norm_weights = F.normalize(self.linear.weight.data)
-        x = F.linear(x,norm_weights.data,self.linear.bias.data)
+        # x = F.normalize(feature_map)
+        # norm_weights = F.normalize(self.linear.weight.data)
+        # x = F.linear(x,norm_weights.data,self.linear.bias.data)
+
+        x=self.linear(feature_map)
 
         return feature_map,x
 
@@ -186,6 +190,32 @@ class ResNet(nn.Module):
         x = x.view(x.size(0), -1)
 
         return x
+
+class CosineLinear(Module):
+    def __init__(self, in_features, out_features, sigma=True):
+        super(CosineLinear, self).__init__()
+        self.in_features = in_features
+        self.out_features = out_features
+        self.weight = Parameter(torch.Tensor(out_features, in_features))
+        if sigma:
+            self.sigma = Parameter(torch.Tensor(1))
+        else:
+            self.register_parameter('sigma', None)
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        stdv = 1. / math.sqrt(self.weight.size(1))
+        self.weight.data.uniform_(-stdv, stdv)
+        if self.sigma is not None:
+            self.sigma.data.fill_(1) #for initializaiton of sigma
+
+    def forward(self, input):
+
+        out = F.linear(F.normalize(input, p=2,dim=1), \
+                F.normalize(self.weight, p=2, dim=1))
+        if self.sigma is not None:
+            out = self.sigma * out
+        return out
 
 def resnet20(pretrained=False, **kwargs):
     n = 3
