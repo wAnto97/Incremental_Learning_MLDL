@@ -2,6 +2,8 @@ from IncrementalLeraningMLDL.src.resnet import resnet32
 from IncrementalLeraningMLDL.src.resnet_cosine import resnet32 as resnet32_cosine
 import torch
 from torch import nn
+import torch.nn.functional as F
+
 import copy
 import torch.optim as optim
 import math
