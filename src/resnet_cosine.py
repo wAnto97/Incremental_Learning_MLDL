@@ -1,5 +1,5 @@
 import torch.nn as nn
-from math import sqrt
+import math
 import torch.utils.model_zoo as model_zoo
 import torch.nn.functional as F
 import torch
@@ -205,7 +205,7 @@ class CosineLinear(nn.Module):
         self.reset_parameters()
 
     def reset_parameters(self):
-        stdv = 1. / sqrt(self.weight.size(1))
+        stdv = 1. / math.sqrt(self.weight.size(1))
         self.weight.data.uniform_(-stdv, stdv)
         if self.sigma is not None:
             self.sigma.data.fill_(1) #for initializaiton of sigma
