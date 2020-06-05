@@ -10,21 +10,27 @@ class MyNet():
         self.type = type
         if(type == 'normal'):
           self.net = resnet32(num_classes=10)
+          self.net.linear = nn.Linear(64,n_classes)
         elif type == 'cosine':
             self.net = resnet32_cosine(num_classes=10)
-        self.net.linear = nn.Linear(64,n_classes)
+            self.net.linear = CosineLinear(64,n_classes)
         self.init_weights = torch.nn.init.kaiming_normal_(self.net.linear.weight)
         self.batch_classes = 10
         self.prev_net = None
     
-    def update_network(self,best_net,n_classes,init_weights):
+    def update_network(self,best_net,n_classes,init_weights,type='not_cosine'):
         self.prev_net = copy.deepcopy(best_net)
         prev_weights = copy.deepcopy(best_net.linear.weight)
-        prev_bias = copy.deepcopy(best_net.linear.bias)
-        self.net.linear = nn.Linear(64,n_classes)
-        self.net.linear.weight.data[:n_classes-self.batch_classes] = prev_weights
-        self.net.linear.bias.data[:n_classes-self.batch_classes] = prev_bias
-
+        if type == 'not_cosine':
+            prev_bias = copy.deepcopy(best_net.linear.bias)
+            self.net.linear = nn.Linear(64,n_classes)
+            self.net.linear.weight.data[:n_classes-self.batch_classes] = prev_weights
+            self.net.linear.bias.data[:n_classes-self.batch_classes] = prev_bias
+        else:
+            prev_sigma = copy.deepcopy(self.net.linear.sigma)
+            self.net.linear = CosineLinear(64,n_classes)
+            self.net.linear.weight.data[:n_classes-self.batch_classes] = prev_weights
+            self.net.linear.sigma.data = prev_sigma
         return self.prev_net,self.net
 
     def get_old_outputs(self,images,labels):
@@ -70,3 +76,29 @@ class MyNet():
                 param.requires_grad = True
         
         return self.net
+    
+class CosineLinear(nn.Module):
+    def __init__(self, in_features, out_features, sigma=True):
+        super(CosineLinear, self).__init__()
+        self.in_features = in_features
+        self.out_features = out_features
+        self.weight = nn.Parameter(torch.Tensor(out_features, in_features))
+        if sigma:
+            self.sigma = nn.Parameter(torch.Tensor(1))
+        else:
+            self.register_parameter('sigma', None)
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        stdv = 1. / math.sqrt(self.weight.size(1))
+        self.weight.data.uniform_(-stdv, stdv)
+        if self.sigma is not None:
+            self.sigma.data.fill_(1) #for initializaiton of sigma
+
+    def forward(self, input):
+
+        out = F.linear(F.normalize(input, p=2,dim=1), \
+                F.normalize(self.weight, p=2, dim=1))
+        if self.sigma is not None:
+            out = self.sigma * out
+        return out
