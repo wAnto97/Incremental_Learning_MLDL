@@ -150,10 +150,10 @@ class Analysis():
         plt.show()
 
     def plotAccTrendComparison(self,accuracies,labels):
-        markers = ['^','o','x','+','D','*','-']
+        markers = ['^','o','x','+','D','*','v']
         colors = ['green','darkblue','orange','grey','black','purple','aqua']
 
-        fig,ax = plt.subplots(figsize=(12,8))
+        _,ax = plt.subplots(figsize=(12,8))
         for index,(acc,label) in enumerate(zip(accuracies,labels)):
             ax.plot(np.arange(10,110, 10),acc,marker=markers[index],color=colors[index],label=label)
 
