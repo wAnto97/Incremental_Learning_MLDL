@@ -26,7 +26,7 @@ class Loss():
 
 
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
-    def LfC_loss(self,old_outputs,new_features,new_output,labels,step,current_step,utils,eta,lambda_base = 5,n_classes=10,batch_size=128,m=0.5,K=2):
+    def LfC_loss(self,old_outputs,new_features,new_output,labels,step,current_step,utils,eta,lambda_base = 10,n_classes=10,batch_size=128,m=0.5,K=2):
         n_old_classes = n_classes*(step-1)
         clf_criterion = nn.CrossEntropyLoss(reduction = 'mean')
         cosine_loss = nn.CosineEmbeddingLoss(reduction='mean')
