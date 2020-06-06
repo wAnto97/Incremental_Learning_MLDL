@@ -26,7 +26,7 @@ class Loss():
 
 
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
-    def LfC_loss(self,old_outputs,new_features,new_output,labels,step,current_step,utils,eta,lambda_base = 2,n_classes=10,batch_size=128,m=0.5):
+    def LfC_loss(self,old_outputs,new_features,new_output,labels,step,current_step,utils,eta,lambda_base = 1,n_classes=10,batch_size=128,m=0.5,K=2):
         n_old_classes = n_classes*(step-1)
         clf_criterion = nn.CrossEntropyLoss(reduction = 'mean')
         cosine_loss = nn.CosineEmbeddingLoss(reduction='mean')
@@ -44,7 +44,7 @@ class Loss():
         exemplar_labels = labels[exemplar_idx].type(torch.long)
         anchors = new_output[exemplar_idx, exemplar_labels] / eta
         out_new_classes = new_output[exemplar_idx, n_old_classes:] / eta
-        topK_hard_negatives, _ = torch.topk(out_new_classes, 2)
+        topK_hard_negatives, _ = torch.topk(out_new_classes, K)
         # print(f'topK_hard_negatives shape: {topK_hard_negatives.shape}') #num of exemplars in batch
         loss_mr = torch.max(m - anchors.unsqueeze(1).cuda() + topK_hard_negatives.cuda(), torch.zeros(1).cuda()).sum(dim=1).mean()
 
