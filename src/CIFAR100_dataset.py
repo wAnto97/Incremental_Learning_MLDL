@@ -26,7 +26,7 @@ def get_n_splits(dataset, n_groups,random_state=41):
       if labels[i].__contains__(label):
         indexes[i].append(index)
         break
-  print(labels)
+
   return indexes,labels
 
 
