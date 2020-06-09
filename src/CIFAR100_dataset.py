@@ -166,7 +166,7 @@ class MyCIFAR100():
     exemplar_indexes = []
 
     
-    indexes = self.indexes_split[group]
+    indexes = self.indexes_split[group-1]
 
     for i in range(len(exemplars_matrix)): # Flat map to retrieve all exemplars indexes
       exemplar_indexes += exemplars_matrix[i]
