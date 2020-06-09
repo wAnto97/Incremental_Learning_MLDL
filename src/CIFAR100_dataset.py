@@ -159,3 +159,22 @@ class MyCIFAR100():
     val_dataset = Subset(self,val_indexes)
     
     return train_dataset,val_dataset
+
+  def create_dataloaders_CB(self,group,exemplars_matrix):
+    indexes = []
+    train_indexes = []
+    exemplar_indexes = []
+
+    
+    indexes = self.indexes_split[group]
+
+    for i in range(len(exemplars_matrix)): # Flat map to retrieve all exemplars indexes
+      exemplar_indexes += exemplars_matrix[i]
+
+    train_indexes,val_indexes = train_test_split(indexes+exemplar_indexes,test_size=0.1,\
+    stratify = [self.dataset.__getitem__(i)[1] for i in indexes],random_state=41)
+
+    train_dataset = Subset(self, train_indexes + exemplar_indexes)
+    val_dataset = Subset(self,val_indexes)
+    
+    return train_dataset,val_dataset

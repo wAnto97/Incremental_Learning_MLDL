@@ -105,6 +105,16 @@ class Utils():
 
         return train_dataloader,test_dataloader
 
+     def create_dataloaders_CB(self, training_set,test_set,group,exemplar_set,BATCH_SIZE):
+        train,val = training_set.get_train_val_CB(group,exemplar_set)
+        test = test_set.get_groups_joint(group)
+
+        train_dataloader =  DataLoader(train,batch_size=BATCH_SIZE,drop_last=True,num_workers=4,shuffle=True)
+        val_dataloader = DataLoader(val,batch_size=BATCH_SIZE,drop_last=True,num_workers=4,shuffle=True)
+        test_dataloader = DataLoader(test,batch_size=BATCH_SIZE,drop_last=False,num_workers=4)
+
+        return train_dataloader,val_dataloader,test_dataloader
+
 
     def create_dataloaders_icarl_validation(self, training_set,test_set,group,exemplar_set,BATCH_SIZE):
         train=training_set.get_train_exemplars(group,exemplar_set)
