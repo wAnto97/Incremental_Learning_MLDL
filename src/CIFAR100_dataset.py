@@ -160,7 +160,7 @@ class MyCIFAR100():
     
     return train_dataset,val_dataset
 
-  def create_dataloaders_CB(self,group,exemplars_matrix):
+  def get_train_val_CB(self,group,exemplars_matrix):
     indexes = []
     train_indexes = []
     exemplar_indexes = []
