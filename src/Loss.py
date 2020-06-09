@@ -26,6 +26,25 @@ class Loss():
 
 
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
+
+    def hinton_loss(self,old_outputs,outputs,labels,step,current_step,utils,classes_per_group,T=2):
+        n_old_classes = classes_per_group*(step-1)
+
+        softmax = torch.nn.Softmax()
+        clf_criterion = torch.nn.CrossEntropyLoss()
+
+        clf_loss = clf_criterion(outputs,labels)
+
+        if step == 1:
+            return clf_loss
+        else:
+            dist_output = torch.log_softmax(outputs[:,:n_old_classes]/T,dim=1)
+            dist_targets = torch.softmax(old_outputs/T,dim=1)
+            dist_loss = torch.sum(dist_output*dist_targets, dim=1, keepdim = False)
+            dist_loss = - torch.mean(dist_loss, dim=0, keepdim = False)
+            tot_loss = clf_loss + dist_loss*(step-1)/step
+            return tot_loss
+
     def LfC_loss(self,old_outputs,new_features,new_output,labels,step,current_step,utils,eta,lambda_base = 10,n_classes=10,batch_size=128,m=0.5,K=2):
         n_old_classes = n_classes*(step-1)
         clf_criterion = nn.CrossEntropyLoss(reduction = 'mean')
