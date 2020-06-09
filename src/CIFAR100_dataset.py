@@ -172,7 +172,7 @@ class MyCIFAR100():
       exemplar_indexes += exemplars_matrix[i]
 
     train_indexes,val_indexes = train_test_split(indexes+exemplar_indexes,test_size=0.1,\
-    stratify = [self.dataset.__getitem__(i)[1] for i in indexes],random_state=41)
+    stratify = [self.dataset.__getitem__(i)[1] for i in indexes+exemplar_indexes],random_state=41)
 
     train_dataset = Subset(self, train_indexes + exemplar_indexes)
     val_dataset = Subset(self,val_indexes)
