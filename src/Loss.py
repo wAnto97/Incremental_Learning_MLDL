@@ -16,7 +16,7 @@ class Loss():
         
         if step == 1 or current_step==-1:
             clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
-            return clf_loss,clf_loss,clf_loss-clf_loss
+            return clf_loss/n_classes,clf_loss,clf_loss-clf_loss
         clf_loss = clf_criterion(new_output[:,n_old_classes:],utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:])
         dist_loss = dist_criterion(new_output[:,:n_old_classes],sigmoid(old_outputs))
         
