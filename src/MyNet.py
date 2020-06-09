@@ -17,7 +17,8 @@ class MyNet():
         elif type == 'cosine':
             self.net = resnet32_cosine(num_classes=10)
             self.net.linear = CosineLinear(64,n_classes)
-        self.init_weights = torch.nn.init.kaiming_normal_(self.net.linear.weight)
+        self.net.linear.weight = torch.nn.init.kaiming_normal_(self.net.linear.weight)
+        self.init_weights = copy.deepcopy(self.net.linear.weight)
         self.batch_classes = 10
         self.prev_net = None
     
