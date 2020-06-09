@@ -16,7 +16,7 @@ class Loss():
         
         if step == 1 or current_step==-1:
             clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
-            return clf_loss/n_classes,clf_loss,clf_loss-clf_loss
+            return clf_loss,clf_loss,clf_loss-clf_loss
         clf_loss = clf_criterion(new_output[:,n_old_classes:],utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:])
         dist_loss = dist_criterion(new_output[:,:n_old_classes],sigmoid(old_outputs))
         
@@ -25,7 +25,7 @@ class Loss():
         tot_loss = clf_criterion(new_output,targets)
 
 
-        return tot_loss*(step/10),clf_loss*1/step,dist_loss*(step-1)/step
+        return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
     def hinton_loss(self,old_outputs,outputs,labels,step,current_step,utils,classes_per_group,T=2):
         n_old_classes = classes_per_group*(step-1)
