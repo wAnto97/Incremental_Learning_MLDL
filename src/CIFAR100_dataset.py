@@ -174,7 +174,7 @@ class MyCIFAR100():
     train_indexes_ex,val_indexes_ex = train_test_split(exemplar_indexes,test_size=int(0.1*len(exemplar_indexes)),\
     stratify = [self.dataset.__getitem__(i)[1] for i in exemplar_indexes],random_state=41)
 
-    train_indexes_new,val_indexes_new = train_test_split(indexes,test_size=int(0.1*len(exemplar_indexes)),\
+    train_indexes_new,val_indexes_new = train_test_split(indexes,test_size=int(0.1*len(exemplar_indexes)/(group-1)),\
     stratify = [self.dataset.__getitem__(i)[1] for i in indexes],random_state=41)
 
     train_dataset = Subset(self, train_indexes_ex + train_indexes_new)
