@@ -25,7 +25,7 @@ class Loss():
         tot_loss = clf_criterion(new_output,targets)
 
 
-        return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
+        return tot_loss*(step/10),clf_loss*1/step,dist_loss*(step-1)/step
 
     def hinton_loss(self,old_outputs,outputs,labels,step,current_step,utils,classes_per_group,T=2):
         n_old_classes = classes_per_group*(step-1)

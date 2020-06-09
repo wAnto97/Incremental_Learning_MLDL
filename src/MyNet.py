@@ -29,11 +29,13 @@ class MyNet():
             prev_bias = copy.deepcopy(best_net.linear.bias)
             self.net.linear = nn.Linear(64,n_classes)
             self.net.linear.weight.data[:n_classes-self.batch_classes] = prev_weights
+            self.net.linear.weight.data[n_classes-self.batch_classes:n_classes] = init_weights
             self.net.linear.bias.data[:n_classes-self.batch_classes] = prev_bias
         else:
             prev_sigma = copy.deepcopy(self.net.linear.sigma)
             self.net.linear = CosineLinear(64,n_classes)
             self.net.linear.weight.data[:n_classes-self.batch_classes] = prev_weights
+            self.net.linear.weight.data[n_classes-self.batch_classes:n_classes] = init_weights
             self.net.linear.sigma.data = prev_sigma
         return self.prev_net,self.net
 
