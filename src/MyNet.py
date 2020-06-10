@@ -17,7 +17,8 @@ class MyNet():
         elif type == 'cosine':
             self.net = resnet32_cosine(num_classes=10)
             self.net.linear = CosineLinear(64,n_classes)
-        self.init_weights = torch.nn.init.kaiming_normal_(self.net.linear.weight)
+        self.net.linear.weight = torch.nn.init.kaiming_normal_(self.net.linear.weight)
+        self.init_weights = copy.deepcopy(self.net.linear.weight)
         self.batch_classes = 10
         self.prev_net = None
     
@@ -28,11 +29,13 @@ class MyNet():
             prev_bias = copy.deepcopy(best_net.linear.bias)
             self.net.linear = nn.Linear(64,n_classes)
             self.net.linear.weight.data[:n_classes-self.batch_classes] = prev_weights
+            self.net.linear.weight.data[n_classes-self.batch_classes:n_classes] = init_weights
             self.net.linear.bias.data[:n_classes-self.batch_classes] = prev_bias
         else:
             prev_sigma = copy.deepcopy(self.net.linear.sigma)
             self.net.linear = CosineLinear(64,n_classes)
             self.net.linear.weight.data[:n_classes-self.batch_classes] = prev_weights
+            self.net.linear.weight.data[n_classes-self.batch_classes:n_classes] = init_weights
             self.net.linear.sigma.data = prev_sigma
         return self.prev_net,self.net
 
