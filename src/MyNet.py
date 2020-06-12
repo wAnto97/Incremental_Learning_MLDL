@@ -52,7 +52,7 @@ class MyNet():
     def prepare_training(self,LR,MOMENTUM,WEIGHT_DECAY,STEP_SIZE,GAMMA,typeScheduler,type='normal'):    
         parameters_to_optimize = self.net.parameters()
         if type == 'cosine':
-            optimizer = optim.SGD(parameters_to_optimize,self.net.linear.sigma,lr=LR, momentum=MOMENTUM, weight_decay=WEIGHT_DECAY)
+            optimizer = optim.SGD(parameters_to_optimize,lr=LR, momentum=MOMENTUM, weight_decay=WEIGHT_DECAY)
         elif type == 'normal':
             optimizer = optim.SGD(parameters_to_optimize,lr=LR, momentum=MOMENTUM, weight_decay=WEIGHT_DECAY)
         if typeScheduler == 'multistep':
