@@ -51,7 +51,9 @@ class MyNet():
 
     def prepare_training(self,LR,MOMENTUM,WEIGHT_DECAY,STEP_SIZE,GAMMA,typeScheduler):    
         parameters_to_optimize = self.net.parameters()
-        print(parameters_to_optimize.values)
+        
+        for i in parameters_to_optimize:
+            print(i)
         optimizer = optim.SGD(parameters_to_optimize, lr=LR, momentum=MOMENTUM, weight_decay=WEIGHT_DECAY)
         if typeScheduler == 'multistep':
             scheduler = optim.lr_scheduler.MultiStepLR(optimizer, STEP_SIZE, gamma=GAMMA)
