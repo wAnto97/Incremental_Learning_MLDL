@@ -58,7 +58,6 @@ class IL2M():
     def predict(self,net,images,step,num_old_classes):
         preds = []
         with torch.no_grad():
-            net.train(False)
             scores = net(images)
             for score in scores:
                     score = score.cpu()

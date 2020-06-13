@@ -70,7 +70,11 @@ class Loss():
 
 
         return clf_loss + dist_loss + loss_mr
-
+    
+    def IL2M_loss(self,outputs,labels):
+        clf_criterion = torch.nn.CrossEntropyLoss()
+        clf_loss = clf_criterion(outputs,labels)
+        return clf_loss
 
     def L2_loss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
         '''MSE loss. Comportamento peggiore rispetto alla BCE (influenzato dalla scelta di parametri non ottimali).'''
