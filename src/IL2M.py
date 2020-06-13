@@ -28,7 +28,6 @@ class IL2M():
                 for score, label in zip(scores, labels):
                     score = score.cpu()
                     label = label.cpu().item()
-                    print(label)
                     # the train dataloader already contains both the new data and the examplars
                     # if label < num_old_classes it means it is an examplar
                     if label >= num_old_classes:
