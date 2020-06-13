@@ -21,7 +21,7 @@ class IL2M():
         net.train(False)
         num_new_training_data=0
         with torch.no_grad():
-            for images, labels in train_dataloader:
+            for images, labels,_ in train_dataloader:
                 images = images.cuda()
                 labels = labels.cuda()
                 scores = net(images)
