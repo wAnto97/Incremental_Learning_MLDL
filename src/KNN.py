@@ -37,6 +37,7 @@ class KNN():
             gs = GridSearchCV(estimator = self.classifier, param_grid = self.k_param_grid, cv = 4)
             gs.fit(features, labels_tot)
             self.classifier = gs.best_estimator_
+            print(self.classifier)
 
     def classify(self, images):
         preds = []
