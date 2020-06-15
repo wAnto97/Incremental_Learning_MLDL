@@ -17,7 +17,7 @@ class KNN():
         self.net = self.net.cuda()
         self.net.train(False)
         with torch.no_grad():
-            for images, labels in train_dataloader:
+            for images, labels,_ in train_dataloader:
                 if images_tot is None:
                     images_tot = images
                     labels_tot = labels
