@@ -19,7 +19,6 @@ class IL2M():
         num_images = [0 for _ in range(num_new_classes + num_old_classes)]
 
         net.train(False)
-        num_new_training_data=0
         with torch.no_grad():
             for images, labels,_ in train_dataloader:
                 images = images.cuda()
@@ -28,17 +27,16 @@ class IL2M():
                 for score, label in zip(scores, labels):
                     score = score.cpu()
                     label = label.cpu().item()
+                    self.confidences[step] += torch.max(score).item()
                     # the train dataloader already contains both the new data and the examplars
                     # if label < num_old_classes it means it is an examplar
                     if label >= num_old_classes:
                         self.mean_train_scores[label][1] += score[label]
-                        self.confidences[step] += torch.max(score).item()
-                        num_new_training_data += 1
                     else:
                         self.mean_examplars_scores[label] += score[label]
                     num_images[label] += 1
 
-        self.confidences[step] /= num_new_training_data
+        self.confidences[step] /= len(train_dataloader.dataset)
         # dividing for the number of images per label
         for i in range(num_old_classes):
             self.mean_examplars_scores[i] /= num_images[i]
