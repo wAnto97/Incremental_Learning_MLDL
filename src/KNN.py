@@ -4,7 +4,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from imblearn.under_sampling import RandomUnderSampler
 import copy
 
-class KNNC():
+class KNN():
     def __init__(self, k_values = [3, 5, 9, 13]):
         self.net = None
         self.k_param_grid = {"n_neighbors": k_values}
