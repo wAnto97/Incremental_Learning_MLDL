@@ -39,9 +39,12 @@ class MyNet():
             self.net.linear.sigma.data = prev_sigma
         return self.prev_net,self.net
 
-    def get_old_outputs(self,images,labels):
+    def get_old_outputs(self,images,labels,type='not_cosine'):
         self.prev_net.train(False)
-        output = self.prev_net(images)
+        if type == 'cosine':
+            _,output = self.prev_net(images)
+        else:
+            output = self.prev_net(images)
         return output
     
     def get_old_features_cosine(self,images,labels):
