@@ -27,7 +27,7 @@ class Loss():
         if type_output=='cosine':
             cosine_loss = nn.CosineEmbeddingLoss(reduction='mean')
             lambda_dist = 2.5*((n_classes/n_old_classes)**0.5)
-            dist_loss = lambda_dist*cosine_loss(new_features, old_outputs,torch.ones(128).cuda())
+            dist_loss = lambda_dist*cosine_loss(new_features, old_features,torch.ones(128).cuda())
             tot_loss = tot_loss + dist_loss
 
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
