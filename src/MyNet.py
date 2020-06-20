@@ -42,10 +42,11 @@ class MyNet():
     def get_old_outputs(self,images,labels,type='not_cosine'):
         self.prev_net.train(False)
         if type == 'cosine':
-            _,output = self.prev_net(images)
+            features,output = self.prev_net(images)
+            return features,output
         else:
             output = self.prev_net(images)
-        return output
+            return output
     
     def get_old_features_cosine(self,images,labels):
         self.prev_net.train(False)
