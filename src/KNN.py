@@ -10,7 +10,7 @@ class KNN():
         self.k_param_grid = {"n_neighbors": k_values}
         self.classifier = KNeighborsClassifier()
 
-    def update(self, net, train_dataloader):
+    def update(self, net, train_dataloader,loss='icarl_loss'):
         self.net = copy.deepcopy(net)
         images_tot = None
         labels_tot = None
@@ -27,7 +27,10 @@ class KNN():
                     labels_tot = torch.cat((labels_tot, labels), 0)
 
             images_tot = images_tot.cuda()
-            features = self.net(images_tot, output = 'features')
+            if loss == 'lfc_loss':
+                features,_ = self.net(images_tot)
+            else:
+                features = self.net(images_tot, output = 'features')
             features = features.cpu()
 
             # undersampling to tackle the unbalance between the new data and old examplars
@@ -39,12 +42,15 @@ class KNN():
             self.classifier = gs.best_estimator_
             print(self.classifier)
 
-    def classify(self, images):
+    def classify(self, images,loss='icarl_loss'):
         preds = []
         self.net = self.net.cuda()
         self.net.train(False)
         with torch.no_grad():
-            features = self.net(images, output = 'features')
+            if loss == 'lfc_loss':
+                features,_ = self.net(images)
+            else:
+                features = self.net(images, output = 'features')
             features = features.cpu()
             # Classifier's predictions
             preds = self.classifier.predict(features)
