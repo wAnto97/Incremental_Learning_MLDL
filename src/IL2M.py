@@ -53,10 +53,10 @@ class IL2M():
             score[i] = score[i] * (mu_p_class/mu_n_class) * (conf_n/conf_p)
         return score
 
-    def predict(self,net,images,step,num_old_classes):
+    def predict(self,outputs,step,num_old_classes):
         preds = []
         with torch.no_grad():
-            scores = torch.nn.Softmax(dim=1)(net(images))
+            scores = torch.nn.Softmax(dim=1)(outputs)
             for score in scores:
                     score = score.cpu()
                     pred = torch.argmax(score).item()
