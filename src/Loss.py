@@ -22,8 +22,8 @@ class Loss():
         
         targets = utils.one_hot_matrix(labels,n_classes*step)
         if type_output == 'cosine':
-            targets[:,:n_old_classes] = (old_outputs+1)/2
-            new_output = (new_output+1)/2
+            targets[:,:n_old_classes] = (old_outputs+torch.ones(old_outputs.size))/2
+            new_output = (new_output+torch.ones(new_output.size))/2
             tot_loss = nn.BCELoss()(new_output,targets)
 
         else:
