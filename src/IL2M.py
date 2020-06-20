@@ -56,7 +56,7 @@ class IL2M():
     def predict(self,net,images,step,num_old_classes):
         preds = []
         with torch.no_grad():
-            scores = torch.nn.Softmax()(net(images))
+            scores = torch.nn.Softmax(dim=1)(net(images))
             for score in scores:
                     score = score.cpu()
                     pred = torch.argmax(score).item()
