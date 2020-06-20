@@ -6,14 +6,14 @@ class Loss():
     def __init__(self):
         pass
     
-    def icarl_loss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10):
+    def icarl_loss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10,type_output='fc',new_features=None,old_features=None):
         '''BCE loss. Citata nel paper di iCarl'''
 
         sigmoid = nn.Sigmoid()
         n_old_classes = n_classes*(step-1)
         clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
         dist_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
-        
+
         if step == 1 or current_step==-1:
             clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
             return clf_loss,clf_loss,clf_loss-clf_loss
@@ -24,6 +24,11 @@ class Loss():
         targets[:,:n_old_classes] = sigmoid(old_outputs)
         tot_loss = clf_criterion(new_output,targets)
 
+        if type_output=='cosine':
+            cosine_loss = nn.CosineEmbeddingLoss(reduction='mean')
+            lambda_dist = 2.5*((n_classes/n_old_classes)**0.5)
+            dist_loss = lambda_dist*cosine_loss(new_features, old_outputs,torch.ones(128).cuda())
+            tot_loss = tot_loss + dist_loss
 
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
