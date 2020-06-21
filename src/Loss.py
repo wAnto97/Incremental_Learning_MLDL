@@ -47,20 +47,26 @@ class Loss():
             return t
 
         sigmoid = nn.Sigmoid()
+        EPS = 3.720076e-44
         n_old_classes = n_classes*(step-1)
-        clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
-        dist_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
 
+        y = utils.one_hot_matrix(labels,n_classes*step)
         if step == 1 or current_step==-1:
-            clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
-            return clf_loss
-        clf_loss = clf_criterion(new_output[:,n_old_classes:],utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:])
+          clf_loss = torch.mean(-(y*torch.log(sigmoid(new_output)+EPS) + (1-y)* torch.log(1 - sigmoid(new_output)+EPS)))
 
-        prob_vect = create_random_matrix(list(old_outputs.shape))
-        dist_loss = prob_vect.cuda()*dist_criterion(new_output[:,:n_old_classes],sigmoid(old_outputs))
+          return clf_loss,
         
+        y_2 = utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:]
 
-        return clf_loss*1/step + dist_loss*(step-1)/step
+        clf_loss = torch.mean(-(y_2*torch.log(sigmoid(new_output[:,n_old_classes:])+EPS) + (1-y_2)* torch.log(1 - sigmoid(new_output[:,n_old_classes:])+EPS)))
+        
+        target = sigmoid(old_outputs)
+        prob_vect = create_random_matrix(list(old_outputs.shape))
+        dist_loss = torch.mean(prob_vect.cuda()*(-(target*torch.log(sigmoid(new_output[:,:n_old_classes])+EPS) + (1-target)* torch.log(1 - sigmoid(new_output[:,:n_old_classes])+EPS))))
+        
+        tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
+
+        return tot_loss
 
     def hinton_loss(self,old_outputs,outputs,labels,step,current_step,utils,classes_per_group,T=2):
         n_old_classes = classes_per_group*(step-1)
