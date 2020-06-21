@@ -48,7 +48,6 @@ class Loss():
         sigmoid = nn.Sigmoid()
         n_old_classes = n_classes*(step-1)
         clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
-        dist_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
 
         if step == 1 or current_step==-1:
             clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
