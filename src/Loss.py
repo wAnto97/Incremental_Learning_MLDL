@@ -31,6 +31,37 @@ class Loss():
 
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
+    def icarl_loss_MMStrategy(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10,type_output='fc',new_features=None,old_features=None):
+        '''BCE loss. Citata nel paper di iCarl'''
+        
+        def create_random_matrix(shape, probability=0.5): #Consigliata una probabilità di 0.5 (simile al drop out)
+            random_matrix = np.ones(shape)
+            for i in range(shape[0]):
+                for j in range(shape[1]):
+                    p = random()
+                    if p <= probability:
+                        random_matrix[i,j] = 0
+                    
+            t = torch.Tensor(random_matrix)
+            
+            return t
+
+        sigmoid = nn.Sigmoid()
+        n_old_classes = n_classes*(step-1)
+        clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
+        dist_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
+
+        if step == 1 or current_step==-1:
+            clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
+            return clf_loss,clf_loss,clf_loss-clf_loss
+        clf_loss = clf_criterion(new_output[:,n_old_classes:],utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:])
+
+        prob_vect = create_random_matrix(list(old_outputs.shape))
+        dist_loss = prob_vect.cuda()*dist_criterion(new_output[:,:n_old_classes],sigmoid(old_outputs))
+        
+
+        return clf_loss*1/step + dist_loss*(step-1)/step
+
     def hinton_loss(self,old_outputs,outputs,labels,step,current_step,utils,classes_per_group,T=2):
         n_old_classes = classes_per_group*(step-1)
 
