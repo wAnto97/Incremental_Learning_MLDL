@@ -62,7 +62,7 @@ class Loss():
         
         target = sigmoid(old_outputs)
         prob_vect = create_random_matrix(list(old_outputs.shape))
-        dist_loss = 2*torch.mean(prob_vect.cuda()*(-(target*torch.log(sigmoid(new_output[:,:n_old_classes])+EPS) + (1-target)* torch.log(1 - sigmoid(new_output[:,:n_old_classes])+EPS))))
+        dist_loss = torch.mean(prob_vect.cuda()*(-(target*torch.log(sigmoid(new_output[:,:n_old_classes])+EPS) + (1-target)* torch.log(1 - sigmoid(new_output[:,:n_old_classes])+EPS))))
         
         tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
 
