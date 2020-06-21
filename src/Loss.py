@@ -54,7 +54,7 @@ class Loss():
         if step == 1 or current_step==-1:
           clf_loss = torch.mean(-(y*torch.log(sigmoid(new_output)+EPS) + (1-y)* torch.log(1 - sigmoid(new_output)+EPS)))
 
-          return clf_loss,
+          return clf_loss
         
         y_2 = utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:]
 
