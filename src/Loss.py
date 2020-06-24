@@ -242,7 +242,7 @@ class Loss():
         #     clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
         #     return clf_loss,clf_loss,clf_loss-clf_loss
 
-        clf_loss = clf_criterion(new_output[:,:n_old_classes],utils.one_hot_matrix(labels,n_old_classes)[:,:n_old_classes])
+        clf_loss = clf_criterion(new_output[:,:n_old_classes],utils.one_hot_matrix(labels,n_classes*step)[:,:n_old_classes])
         target = sigmoid(old_outputs)
         
         prob_vect = create_random_matrix(list(old_outputs.shape))
