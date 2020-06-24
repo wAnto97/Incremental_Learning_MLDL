@@ -160,7 +160,7 @@ class MyCIFAR100():
     
     return train_dataset,val_dataset
 
-  def get_train_val_CB(self,group,exemplars_matrix):
+  def get_train_rebalancing(self,group,exemplars_matrix):
     indexes = []
     train_indexes = []
     exemplar_indexes = []
@@ -171,13 +171,9 @@ class MyCIFAR100():
     for i in range(len(exemplars_matrix)): # Flat map to retrieve all exemplars indexes
       exemplar_indexes += exemplars_matrix[i]
 
-    train_indexes_ex,val_indexes_ex = train_test_split(exemplar_indexes,test_size=int(0.1*len(exemplar_indexes)),\
-    stratify = [self.dataset.__getitem__(i)[1] for i in exemplar_indexes],random_state=41)
-
-    train_indexes_new,val_indexes_new = train_test_split(indexes,test_size=int(0.1*len(exemplar_indexes)/(group-1)),\
+    train_indexes_new,val_indexes_new = train_test_split(indexes,train_size=int(0.1*len(exemplar_indexes)/(group-1)),\
     stratify = [self.dataset.__getitem__(i)[1] for i in indexes],random_state=41)
 
-    train_dataset = Subset(self, train_indexes_ex + train_indexes_new)
-    val_dataset = Subset(self,val_indexes_ex + val_indexes_new)
+    train_dataset = Subset(self, exemplar_indexes + train_indexes_new)
     
-    return train_dataset,val_dataset
+    return train_dataset
