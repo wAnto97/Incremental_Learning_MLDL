@@ -217,6 +217,39 @@ class Loss():
         tot_loss = clf_loss*1/step + w_dist * dist_loss*(step-1)/step
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
+    def MMLoss_onlydist_Prob_Rebalancing(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10, w=1/4, w_dist = 2):
+        '''
+        Stessa di MM_onlydist, ma rimuove alcuni contributi di distillation, moltiplicando per un tensore random 
+        (con probabilità variabile) di 0 e 1
+        '''
+        def create_random_matrix(shape, probability=0.5): #Consigliata una probabilità di 0.5 (simile al drop out)
+            random_matrix = np.ones(shape)
+            for i in range(shape[0]):
+                for j in range(shape[1]):
+                    p = random()
+                    if p <= probability:
+                        random_matrix[i,j] = 0
+                    
+            t = torch.Tensor(random_matrix)
+            
+            return t
+
+        sigmoid = nn.Sigmoid()
+        n_old_classes = n_classes*(step-1)
+        clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
+
+        if step == 1 or current_step==-1:
+            clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
+            return clf_loss,clf_loss,clf_loss-clf_loss
+
+        clf_loss = clf_criterion(new_output[:,:n_old_classes],utils.one_hot_matrix(labels,n_classes*step)[:,:n_old_classes])
+        target = sigmoid(old_outputs)
+        
+        prob_vect = create_random_matrix(list(old_outputs.shape))
+        dist_loss = torch.mean(prob_vect.cuda() * (- w * (4*(2*target - 1).pow(3) * (2*sigmoid(new_output[:,n_old_classes:]) - 1) - (2*sigmoid(new_output[:,n_old_classes:]) - 1).pow(4) - 3)))
+       
+        tot_loss = clf_loss*1/step + w_dist * dist_loss*(step-1)/step
+        return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
     def MMLoss_CE(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10, w=1/4):
         '''
