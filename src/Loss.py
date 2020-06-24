@@ -216,7 +216,82 @@ class Loss():
        
         tot_loss = clf_loss*1/step + w_dist * dist_loss*(step-1)/step
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
+    
+    def MMLoss_onlydist_FAMILY(self,old_outputs,new_output,labels,step,current_step,utils, degree=4, n_classes=10, w = None, p_relaxation = None):
+        '''
+        p_relaxation è la probabilità che un contributo della distillation loss VENGA annullato. se p=None o 0, non viene applicata 'MM-relaxation'
+        w serve ad allineare i contributi di classification e distillation in modo tale che abbiano pendenze e learning rate simili.
+        senza questo fattore la distillation avrebbe un peso molto maggiore rispetto alla clf. se si usa la BCE w=1/g
+        Il valore di default è stato trovato usando un approccio grafico
+        '''
+        
+        def create_random_matrix(shape, probability = p_relaxation): #Consigliata una probabilità di 0.5 (simile al drop out)
+            random_matrix = np.ones(shape)
+            for i in range(shape[0]):
+                for j in range(shape[1]):
+                    p = random()
+                    if p <= probability:
+                        random_matrix[i,j] = 0
+        
+        g = degree
+        if w == None:
+          w= 1/g
+        
+        w_dist = 1/ (1 - p_relaxation)
 
+        sigmoid = nn.Sigmoid()
+        n_old_classes = n_classes*(step-1)
+        clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
+
+        if step == 1 or current_step==-1:
+            clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
+            return clf_loss,clf_loss,clf_loss-clf_loss
+
+        clf_loss = clf_criterion(new_output[:,n_old_classes:],utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:])
+        target = sigmoid(old_outputs)
+        
+        if p_relaxation == None or p_relaxation == 0:
+            dist_loss = torch.mean(- w * (g*(2*target - 1).pow(g-1) * (2*sigmoid(new_output[:,:n_old_classes]) - 1) - (2*sigmoid(new_output[:,:n_old_classes]) - 1).pow(g) - (g-1)))
+        else:
+            prob_vect = create_random_matrix(list(old_outputs.shape))
+            dist_loss = w_dist * torch.mean(prob_vect.cuda() * (- w * (g*(2*target - 1).pow(g-1) * (2*sigmoid(new_output[:,:n_old_classes]) - 1) - (2*sigmoid(new_output[:,:n_old_classes]) - 1).pow(g) - (g-1))))
+            
+        tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
+        return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
+
+    def MMLoss_onlydist_Prob_Rebalancing(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10, w=1/4, w_dist = 2):
+        '''
+        Stessa di MM_onlydist, ma rimuove alcuni contributi di distillation, moltiplicando per un tensore random 
+        (con probabilità variabile) di 0 e 1
+        '''
+        def create_random_matrix(shape, probability=0.5): #Consigliata una probabilità di 0.5 (simile al drop out)
+            random_matrix = np.ones(shape)
+            for i in range(shape[0]):
+                for j in range(shape[1]):
+                    p = random()
+                    if p <= probability:
+                        random_matrix[i,j] = 0
+                    
+            t = torch.Tensor(random_matrix)
+            
+            return t
+
+        sigmoid = nn.Sigmoid()
+        n_old_classes = n_classes*(step-1)
+        clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
+
+        # if step == 1 or current_step==-1:
+        #     clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
+        #     return clf_loss,clf_loss,clf_loss-clf_loss
+
+        clf_loss = clf_criterion(new_output[:,:n_old_classes],utils.one_hot_matrix(labels,n_classes*step)[:,:n_old_classes])
+        target = sigmoid(old_outputs)
+        
+        prob_vect = create_random_matrix(list(old_outputs.shape))
+        dist_loss = torch.mean(prob_vect.cuda() * (- w * (4*(2*target - 1).pow(3) * (2*sigmoid(new_output[:,n_old_classes:]) - 1) - (2*sigmoid(new_output[:,n_old_classes:]) - 1).pow(4) - 3)))
+       
+        tot_loss = clf_loss*1/step + w_dist * dist_loss*(step-1)/step
+        return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
     def MMLoss_CE(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10, w=1/4):
         '''

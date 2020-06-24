@@ -21,6 +21,8 @@ class MyNet():
         self.init_weights = copy.deepcopy(self.net.linear.weight)
         self.batch_classes = 10
         self.prev_net = None
+        self.balancing_net = None
+
     
     def update_network(self,best_net,n_classes,init_weights,type='not_cosine'):
         self.prev_net = copy.deepcopy(best_net)
@@ -39,11 +41,15 @@ class MyNet():
             self.net.linear.sigma.data = prev_sigma
         return self.prev_net,self.net
 
-    def get_old_outputs(self,images,labels,type='not_cosine'):
+    def get_old_outputs(self,images,labels,n_old_classes = None,type='not_cosine'):
         self.prev_net.train(False)
         if type == 'cosine':
             features,output = self.prev_net(images)
-            return features,output
+            return features[:],output
+        elif type == 'rebalancing':
+            self.balancing_net.train(False)
+            output = self.balancing_net(images)
+            return output[:,n_old_classes:]
         else:
             output = self.prev_net(images)
             return output
