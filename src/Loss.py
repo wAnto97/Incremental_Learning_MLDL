@@ -225,8 +225,7 @@ class Loss():
         Il valore di default è stato trovato usando un approccio grafico
         '''
         
-        p = 1 - p_relaxation
-        def create_random_matrix(shape, probabilityv= p): #Consigliata una probabilità di 0.5 (simile al drop out)
+        def create_random_matrix(shape, probability = p_relaxation): #Consigliata una probabilità di 0.5 (simile al drop out)
             random_matrix = np.ones(shape)
             for i in range(shape[0]):
                 for j in range(shape[1]):
@@ -238,7 +237,7 @@ class Loss():
         if w == None:
           w= 1/g
         
-        w_dist = 1/p
+        w_dist = 1/ (1 - p_relaxation)
 
         sigmoid = nn.Sigmoid()
         n_old_classes = n_classes*(step-1)
