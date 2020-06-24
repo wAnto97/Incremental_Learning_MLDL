@@ -232,6 +232,9 @@ class Loss():
                     p = random()
                     if p <= probability:
                         random_matrix[i,j] = 0
+            t = torch.Tensor(random_matrix)
+            
+            return t 
         
         g = degree
         if w == None:
@@ -254,7 +257,7 @@ class Loss():
             dist_loss = torch.mean(- w * (g*(2*target - 1).pow(g-1) * (2*sigmoid(new_output[:,:n_old_classes]) - 1) - (2*sigmoid(new_output[:,:n_old_classes]) - 1).pow(g) - (g-1)))
         else:
             prob_vect = create_random_matrix(list(old_outputs.shape))
-            dist_loss = w_dist * torch.mean(prob_vect.cuda() * (- w * (g*(2*target - 1).pow(g-1) * (2*sigmoid(new_output[:,:n_old_classes]) - 1) - (2*sigmoid(new_output[:,:n_old_classes]) - 1).pow(g) - (g-1))))
+            dist_loss = w_dist * torch.mean(prob_vect.cuda() * ( (-w) * (g*(2*target - 1).pow(g-1) * (2*sigmoid(new_output[:,:n_old_classes]) - 1) - (2*sigmoid(new_output[:,:n_old_classes]) - 1).pow(g) - (g-1))))
             
         tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
