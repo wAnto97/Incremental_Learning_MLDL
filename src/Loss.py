@@ -130,6 +130,20 @@ class Loss():
 
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
 
+    def MM_quadratic(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10,flat_coef = 3):
+        sigmoid = nn.Sigmoid()
+        n_old_classes = n_classes*(step-1)
+        clf_criterion = nn.MSELoss(reduction='mean')
+
+        if step == 1 or current_step==-1:
+            clf_loss = clf_criterion(sigmoid(new_output),utils.one_hot_matrix(labels,n_classes*step))
+            return clf_loss,clf_loss,clf_loss-clf_loss
+        clf_loss = clf_criterion(sigmoid(new_output[:,n_old_classes:]) , utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:])
+        dist_loss = torch.mean( (sigmoid(new_output[:,:n_old_classes]) - sigmoid(old_outputs)).pow(2) * (flat_coef*sigmoid(old_outputs).pow(2) - flat_coef*sigmoid(old_outputs) + 1) ) 
+        tot_loss = 1/step*clf_loss + (step-1)/step * dist_loss
+
+        return tot_loss,clf_loss,dist_loss
+
 
     def MMLoss(self,old_outputs,new_output,labels,step,current_step,utils,n_classes=10, w=1/4):
         '''
