@@ -79,7 +79,7 @@ class Loss():
             tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
             return tot_loss
 
-    def LfC_loss(self,old_outputs,new_features,new_output,labels,step,current_step,utils,eta,lambda_base = 5,n_classes=10,batch_size=128,m=0.5,K=5):
+    def LfC_loss(self,old_outputs,new_features,new_output,labels,step,current_step,utils,eta,lambda_base = 2,n_classes=10,batch_size=128,m=0.5,K=2):
         n_old_classes = n_classes*(step-1)
         clf_criterion = nn.CrossEntropyLoss(reduction = 'mean')
         cosine_loss = nn.CosineEmbeddingLoss(reduction='mean')
@@ -225,20 +225,22 @@ class Loss():
         Il valore di default è stato trovato usando un approccio grafico
         '''
         
-        p = 1 - p_relaxation
-        def create_random_matrix(shape, probabilityv= p): #Consigliata una probabilità di 0.5 (simile al drop out)
+        def create_random_matrix(shape, probability = p_relaxation): #Consigliata una probabilità di 0.5 (simile al drop out)
             random_matrix = np.ones(shape)
             for i in range(shape[0]):
                 for j in range(shape[1]):
                     p = random()
                     if p <= probability:
                         random_matrix[i,j] = 0
+            t = torch.Tensor(random_matrix)
+            
+            return t 
         
         g = degree
         if w == None:
           w= 1/g
         
-        w_dist = 1/p
+        w_dist = 1/ (1 - p_relaxation)
 
         sigmoid = nn.Sigmoid()
         n_old_classes = n_classes*(step-1)
@@ -252,10 +254,10 @@ class Loss():
         target = sigmoid(old_outputs)
         
         if p_relaxation == None or p_relaxation == 0:
-            dist_loss = torch.mean(- w * (g*(2*target - 1).pow(g-1) * (2*sigmoid(new_output[:,:n_old_classes]) - 1) - (2*sigmoid(new_output[:,:n_old_classes]) - 1).pow(g) - (g-1)))
+            dist_loss = torch.mean(-1*w * (g*(2*target - 1).pow(g-1) * (2*sigmoid(new_output[:,:n_old_classes]) - 1) - (2*sigmoid(new_output[:,:n_old_classes]) - 1).pow(g) - (g-1)))
         else:
             prob_vect = create_random_matrix(list(old_outputs.shape))
-            dist_loss = w_dist * torch.mean(prob_vect.cuda() * (- w * (g*(2*target - 1).pow(g-1) * (2*sigmoid(new_output[:,:n_old_classes]) - 1) - (2*sigmoid(new_output[:,:n_old_classes]) - 1).pow(g) - (g-1))))
+            dist_loss = w_dist * torch.mean(prob_vect.cuda() * ( -1*w * (g*(2*target - 1).pow(g-1) * (2*sigmoid(new_output[:,:n_old_classes]) - 1) - (2*sigmoid(new_output[:,:n_old_classes]) - 1).pow(g) - (g-1))))
             
         tot_loss = clf_loss*1/step + dist_loss*(step-1)/step
         return tot_loss,clf_loss*1/step,dist_loss*(step-1)/step
