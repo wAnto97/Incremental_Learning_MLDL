@@ -49,7 +49,7 @@ class MyNet():
         elif type == 'rebalancing':
             self.balancing_net.train(False)
             output = self.balancing_net(images)
-            return features[n_old_classes:],output[n_old_classes:]
+            return output[n_old_classes:]
         else:
             output = self.prev_net(images)
             return output
