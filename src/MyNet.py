@@ -40,15 +40,15 @@ class MyNet():
             self.net.linear.sigma.data = prev_sigma
         return self.prev_net,self.net
 
-    def get_old_outputs(self,images,labels,type='not_cosine'):
+    def get_old_outputs(self,images,labels,n_old_classes = None,type='not_cosine',CLASSES_PER_GROUP = 10):
         self.prev_net.train(False)
         self.balancing_net.train(False)
         if type == 'cosine':
             features,output = self.prev_net(images)
-            return features,output
+            return features[:],output
         elif type == 'rebalancing':
             features,output = self.balancing_net(images)
-            return features,output
+            return features[n_old_classes:],output[n_old_classes:]
         else:
             output = self.prev_net(images)
             return output
