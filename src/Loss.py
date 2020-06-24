@@ -238,14 +238,15 @@ class Loss():
         n_old_classes = n_classes*(step-1)
         clf_criterion = nn.BCEWithLogitsLoss(reduction = 'mean')
 
-        if step == 1 or current_step==-1:
-            clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
-            return clf_loss,clf_loss,clf_loss-clf_loss
+        # if step == 1 or current_step==-1:
+        #     clf_loss = clf_criterion(new_output,utils.one_hot_matrix(labels,n_classes*step))
+        #     return clf_loss,clf_loss,clf_loss-clf_loss
 
-        clf_loss = clf_criterion(new_output[:,:n_old_classes],utils.one_hot_matrix(labels,n_classes*step)[:,:n_old_classes])
+        clf_loss = clf_criterion(new_output[:,:n_old_classes],utils.one_hot_matrix(labels,n_old_classes)[:,:n_old_classes])
         target = sigmoid(old_outputs)
         
         prob_vect = create_random_matrix(list(old_outputs.shape))
+        print("Old output shape ",old_outputs.shape)
         dist_loss = torch.mean(prob_vect.cuda() * (- w * (4*(2*target - 1).pow(3) * (2*sigmoid(new_output[:,n_old_classes:]) - 1) - (2*sigmoid(new_output[:,n_old_classes:]) - 1).pow(4) - 3)))
        
         tot_loss = clf_loss*1/step + w_dist * dist_loss*(step-1)/step
