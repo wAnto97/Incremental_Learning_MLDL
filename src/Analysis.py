@@ -5,6 +5,9 @@ from sklearn.metrics import confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.patheffects as PathEffects
+from sklearn.manifold import TSNE
+import torch
 
 
 class Analysis():
@@ -169,3 +172,83 @@ class Analysis():
         ax.set_xlim(xmin=9,xmax=101)
         plt.legend()
         ax.grid(axis='y')
+    
+    def scatter_images(self,x, colors, human_readable_label):
+
+        sns.set_style('darkgrid')
+        sns.set_palette('muted')
+        sns.set_context("notebook", font_scale=1.5,
+                        rc={"lines.linewidth": 2.5})
+        RS = 123
+        name = np.unique(colors)
+        # choose a color palette with seaborn.
+        num_classes = len(np.unique(colors))
+        palette = np.array(sns.color_palette("pastel", num_classes))
+
+        # create a scatter plot.
+        f = plt.figure(figsize=(15, 10))
+        ax = plt.subplot(aspect='equal')
+        sc = ax.scatter(x[:,0], x[:,1], lw=0, s=40, c=palette[colors.astype(np.int)])
+        plt.xlim(-25, 25)
+        plt.ylim(-25, 25)
+        plt.grid()
+
+        ax.axis('off')
+        ax.axis('tight')
+
+
+        # add the labels for each digit corresponding to the label
+        txts = []
+
+        for i in range(num_classes):
+
+            # Position of each label at median of data points.
+
+            xtext, ytext = np.median(x[colors == i, :], axis=0) + 1
+            txt = ax.text(xtext, ytext, human_readable_label[i], fontsize=12)
+            txt.set_path_effects([
+                PathEffects.Stroke(linewidth=5, foreground="w"),
+                PathEffects.Normal()])
+            txts.append(txt)
+        plt.savefig(f"tnse_{len(name)}.png") #Store the pic locally
+        plt.show()
+        return f, ax, sc, txts
+    
+    def create_tsne(self,net,exemplars,training_set, human_readable_label):
+        """
+        The function plots the t-sne representation for the exemplar set
+        Ex.
+            human_readable_label = cifar100.human_readable_label
+            create_tsne(icarl, human_readable_label)
+        Params:
+        net: the model chosen
+        human_readable_label: the names of the label assigned to each image
+        Return:
+        t-sne representation of image in 2 dimensions
+        """
+        with torch.no_grad():
+            net.eval()
+            for i,exemplar_class_set in enumerate(exemplars.exemplar_set):
+                dim = len(exemplar_class_set)
+                fts_exemplar = []
+                if i == 0:
+                    all_images = []
+                class_images = exemplars.get_class_images(training_set,exemplar_class_set) # recupero le immagini degli exemplars attraverso gli indici precedentemente selezionati
+                for exemplar in  class_images:
+                    ft_map = net.feature_extractor(exemplar.to("cuda").unsqueeze(0)).squeeze().cpu()
+                    fts_exemplar.append(ft_map)
+                fts_exemplar = torch.stack(fts_exemplar)
+
+                if i == 0:
+                    all_images = fts_exemplar
+                    all_labels = np.full((dim), i)
+                else:
+                    all_images = torch.cat((all_images, fts_exemplar), 0)
+                    all_labels = np.concatenate((all_labels, np.full((dim), i)))
+
+
+            #Now I Have all_images and all_labels, I can start the reduce phase
+            fashion_tsne = TSNE().fit_transform(all_images.cpu().detach().numpy())
+            #Plot
+            f, ax, sc, txts = self.scatter_images(fashion_tsne, all_labels, human_readable_label)
+            return f, ax, sc, txts
