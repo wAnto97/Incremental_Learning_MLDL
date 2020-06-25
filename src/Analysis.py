@@ -13,7 +13,8 @@ import torch
 class Analysis():
     def __init__(self):
         pass
-
+    
+     
     def useful_plots(self,confusion_matrices):
         n_sample = 1000
         classes_for_batch = 10
