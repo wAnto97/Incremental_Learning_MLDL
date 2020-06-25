@@ -142,6 +142,7 @@ class Analysis():
 
     def plotConfMatrix(self,confusion_matrix,title):
         confusion_matrix = np.array(confusion_matrix)
+        confusion_matrix = np.log(np.ones(confusion_matrix.shape) + confusion_matrix)
         confusion_matrix = np.transpose(confusion_matrix)
         
         fig,ax=plt.subplots(figsize=(7,5))
