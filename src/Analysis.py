@@ -184,7 +184,7 @@ class Analysis():
         name = np.unique(colors)
         # choose a color palette with seaborn.
         num_classes = len(np.unique(colors))
-        palette = np.array(sns.color_palette("pastel", num_classes))
+        palette = np.array(sns.color_palette("deep", num_classes))
 
         # create a scatter plot.
         f = plt.figure(figsize=(15, 10))
