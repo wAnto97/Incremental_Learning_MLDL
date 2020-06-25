@@ -243,6 +243,7 @@ class Analysis():
                 if i == 0:
                     all_images = fts_exemplar
                     all_labels = np.full((dim), i)
+                    print(all_labels)
                 else:
                     all_images = torch.cat((all_images, fts_exemplar), 0)
                     all_labels = np.concatenate((all_labels, np.full((dim), i)))
