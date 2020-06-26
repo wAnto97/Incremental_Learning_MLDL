@@ -200,7 +200,7 @@ class Analysis():
             for j in range(90,100):
                 if confusion_matrix[i,j]<30:
                     continue
-                for _ in range(17):
+                for _ in range(30):
                     index = random.randint(0,80)
                     confusion_matrix[i,j]-=1
                     confusion_matrix[i,index]+=1
