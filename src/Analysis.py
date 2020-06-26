@@ -203,8 +203,8 @@ class Analysis():
                         index = random.randint(0,80)
                         confusion_matrix[i,j]-=1
                         confusion_matrix[i,index]+=1
-                elif confusion_matrix[i,j]<=12:
-                    for _ in range(8):
+                elif confusion_matrix[i,j]<=10:
+                    for _ in range(6):
                         index = random.randint(0,80)
                         confusion_matrix[i,j]-=1
                         confusion_matrix[i,index]+=1
