@@ -204,6 +204,28 @@ class Analysis():
         plt.xlabel('Predicted label')
         plt.title(title)
         plt.show()
+    
+    def plotPrevNewAccTrendComparison(self,accuracies,labels):
+        markers = ['^','o']
+        colors = ['green','darkblue']
+
+        _,ax = plt.subplots(figsize=(12,8))
+        for index,(acc,label) in enumerate(zip(accuracies,labels)):
+            ax.plot(np.arange(10,110, 10),acc,marker=markers[int(index/2)],color=colors[int(index/2)],label=label)
+
+        plt.ylabel('Accuracy')
+        plt.xlabel('n_classes')
+        plt.title('Top-1 accuracy')
+        major_ticks = np.arange(0, 1.1, 0.1)
+        minor_ticks = np.arange(0, 1, 0.02)
+        ax.set_yticks(major_ticks)
+        ax.set_yticks(minor_ticks, minor=True)
+        ax.set_xticks(np.arange(10,110,10))
+        ax.set_xlim(xmin=9,xmax=101)
+        ax.set_ylim(ymin=0.35,ymax=1.0)
+        
+        plt.legend()
+        ax.grid(axis='y')
 
     def plotAccTrendComparison(self,accuracies,labels):
         markers = ['^','o','x','+','D','*','v']
