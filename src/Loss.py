@@ -55,11 +55,13 @@ class Loss():
 
         clf_loss = clf_criterion(new_output[:,n_old_classes:],utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:])
 
-        prob_vect = create_random_matrix(list(old_outputs.shape))
+        prob_vect = self.create_random_matrix(list(old_outputs.shape))
         dist_criterion = nn.BCEWithLogitsLoss(weight = 2*prob_vect.cuda(),reduction = 'mean')
         dist_loss = dist_criterion(new_output[:,:n_old_classes],sigmoid(old_outputs))
 
         return clf_loss*1/step+ dist_loss*(step-1)/step
+    
+
 
     def hinton_loss(self,old_outputs,outputs,labels,step,current_step,utils,classes_per_group,T=2):
         n_old_classes = classes_per_group*(step-1)
