@@ -141,6 +141,57 @@ class Analysis():
         plt.grid()
         plt.show()
 
+    def getPrevNewAccuracies(self,confusion_matrices):
+        n_sample = 1000
+        classes_for_batch = 10
+        previous_accuracies = [None]
+        total_accuracies = []
+        new_accuracies = []
+        batches_accuracies = []
+        n_classes = []
+
+        for step in range(len(confusion_matrices)):
+            count = 0
+            sum_true_previous = 0
+            sum_true_new = 0
+            sum_batch = 0
+            tot = n_sample *(step)
+            current_matrix = confusion_matrices[step]
+            batches_accuracies.append([])
+            for _ in range(step):
+                batches_accuracies[step].append(None)
+
+            for i in range(len(current_matrix)): 
+                if step == 0:
+                    sum_true_new += current_matrix[i][i]
+                    sum_batch += current_matrix[i][i]
+                    count += 1
+
+                if step > 0 and i < (len(current_matrix)-10):
+                    sum_true_previous += current_matrix[i][i]
+                    sum_batch += current_matrix[i][i]
+                    count += 1
+
+                if step > 0 and i >= (len(current_matrix)-10):
+                    sum_true_new += current_matrix[i][i]
+                    sum_batch += current_matrix[i][i]
+                    count +=1
+
+                if ((i+1) % classes_for_batch) == 0:
+                    b = int(((i+1) / classes_for_batch)-1)
+                    batches_accuracies[b].append((100*sum_batch)/n_sample)
+                    sum_batch = 0
+
+
+            new_accuracies.append(100*(sum_true_new/n_sample))
+            total_accuracies.append(100*((sum_true_previous + sum_true_new)/(tot + n_sample)))
+            n_classes.append(10*(step+1))
+            
+            if step > 0:
+                previous_accuracies.append(100*(sum_true_previous/tot))
+
+        return previous_accuracies,new_accuracies
+
     def plotConfMatrix(self,confusion_matrix,title):
         confusion_matrix = np.array(confusion_matrix)
         confusion_matrix = np.log(np.ones(confusion_matrix.shape) + confusion_matrix)
