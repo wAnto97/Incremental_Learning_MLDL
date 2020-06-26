@@ -198,9 +198,9 @@ class Analysis():
         confusion_matrix = np.array(confusion_matrix)
         for i in range(90,100):
             for j in range(0,100):
-                numIter = int(confusion_matrix[i,j]*0.4)
+                numIter = int(confusion_matrix[i,j]*0.5)
                 for _ in range(numIter):
-                    index = random.randint(0,99)
+                    index = random.randint(0,89)
                     confusion_matrix[i,j]-=1
                     confusion_matrix[i,index]+=1
                     
