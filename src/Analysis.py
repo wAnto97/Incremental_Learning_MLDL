@@ -198,8 +198,8 @@ class Analysis():
         confusion_matrix = np.array(confusion_matrix)
         for i in range(0,100):
             for j in range(90,100):
-                if confusion_matrix[i,j]<10:
-                    continue
+                # if confusion_matrix[i,j]<10:
+                #     continue
                 for _ in range(30):
                     index = random.randint(0,80)
                     confusion_matrix[i,j]-=1
