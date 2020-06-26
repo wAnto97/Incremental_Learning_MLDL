@@ -223,6 +223,8 @@ class Analysis():
         ax.set_yticks(minor_ticks, minor=True)
         ax.set_xticks(np.arange(10,110,10))
         ax.set_xlim(xmin=9,xmax=101)
+        ax.set_ylim(ymin=0.35,ymax=1.0)
+        
         plt.legend()
         ax.grid(axis='y')
     
