@@ -211,7 +211,7 @@ class Analysis():
 
         _,ax = plt.subplots(figsize=(12,8))
         for index,(acc,label) in enumerate(zip(accuracies,labels)):
-            ax.plot(np.arange(10,110, 10),acc,marker=markers[int(index/2)],color=colors[int(index/2)],label=label)
+            ax.plot(np.arange(10,110, 10),acc,marker=markers[0],color=colors[0])],label=label)
 
         plt.ylabel('Accuracy')
         plt.xlabel('n_classes')
