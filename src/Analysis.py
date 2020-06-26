@@ -183,13 +183,13 @@ class Analysis():
                     sum_batch = 0
 
 
-            new_accuracies.append(100*(sum_true_new/n_sample))
+            new_accuracies.append((sum_true_new/n_sample))
             total_accuracies.append(100*((sum_true_previous + sum_true_new)/(tot + n_sample)))
             n_classes.append(10*(step+1))
             
             if step > 0:
-                previous_accuracies.append(100*(sum_true_previous/tot))
-
+                previous_accuracies.append((sum_true_previous/tot))
+            
         return previous_accuracies,new_accuracies
 
     def plotConfMatrix(self,confusion_matrix,title):
