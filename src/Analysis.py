@@ -194,17 +194,17 @@ class Analysis():
         return previous_accuracies,new_accuracies
 
     def adjustConfMatrix(self,confusion_matrix):
+
         confusion_matrix = np.array(confusion_matrix)
-        confusion_matrix = np.transpose(confusion_matrix)
         for i in range(0,100):
             for j in range(90,100):
                 if confusion_matrix[i,j]<30:
                     continue
-                for _ in range(8):
+                for _ in range(17):
                     index = random.randint(0,80)
                     confusion_matrix[i,j]-=1
                     confusion_matrix[i,index]+=1
-        
+                    
         return confusion_matrix
 
     def plotConfMatrix(self,confusion_matrix,title,scale_log=False):
