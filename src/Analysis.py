@@ -99,7 +99,7 @@ class Analysis():
 
         fig, ax = plt.subplots(figsize=(6,5))
 
-        ax.plot(n_classes, gaps_old_classes, marker ='o', label='Gap old classes')
+        ax.plot(n_classes, gaps_old_classes[0], marker ='o', label='Gap old classes')
         #ax.plot(n_classes, gaps_new_classes, marker ='o', label='Accuracy new classes')
 
         ax.legend()
