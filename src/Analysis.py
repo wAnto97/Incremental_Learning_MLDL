@@ -250,7 +250,7 @@ class Analysis():
         plt.legend()
         ax.grid(axis='y')
 
-    def plotAccTrendComparison(self,accuracies,labels):
+    def plotAccTrendComparison(self,accuracies,labels,limit_min=True):
         markers = ['^','o','x','+','D','*','v']
         colors = ['green','darkblue','orange','grey','black','purple','aqua']
 
@@ -267,8 +267,12 @@ class Analysis():
         ax.set_yticks(major_ticks)
         ax.set_yticks(minor_ticks, minor=True)
         ax.set_xticks(np.arange(10,110,10))
-        ax.set_xlim(xmin=9,xmax=101)
-        ax.set_ylim(ymin=0.35,ymax=1.0)
+        if not limit_min:
+            ax.set_xlim(xmin=9,xmax=101)
+            ax.set_ylim(ymin=0.0,ymax=1.0)
+        else:
+            ax.set_xlim(xmin=9,xmax=101)
+            ax.set_ylim(ymin=0.35,ymax=1.0)
         
         plt.legend()
         ax.grid(axis='y')
