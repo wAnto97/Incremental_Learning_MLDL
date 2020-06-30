@@ -130,13 +130,15 @@ class Analysis():
         fig, ax = plt.subplots(figsize=(12,10))
 
         for i in range(1):#len(batches_accuracies)):
-            ax.plot(n_classes, batches_accuracies[i], marker ='o', label = f'Accuracy batch {i}')
+            ax.plot(n_classes, batches_accuracies[i], marker ='o', label = f'Accuracy batch {i+1}')
 
         ax.legend()
         plt.xlabel('N Classes')
         plt.ylabel('Accuracy (%)')
         plt.yticks(np.arange(0, 100, 10))
         plt.xticks(np.arange(0, 100, 20))
+        ax.set_xlim(xmin=9,xmax=101)
+        ax.set_ylim(ymin=0.40,ymax=1.0)
 
         plt.tight_layout()
         plt.grid()
