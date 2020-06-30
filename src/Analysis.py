@@ -58,7 +58,7 @@ class Analysis():
 
                 if ((i+1) % classes_for_batch) == 0:
                     b = int(((i+1) / classes_for_batch)-1)
-                    batches_accuracies[b].append((100*sum_batch)/n_sample)
+                    batches_accuracies[b].append((sum_batch)/n_sample)
                     sum_batch = 0
 
 
