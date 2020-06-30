@@ -135,13 +135,16 @@ class Analysis():
         ax.legend()
         plt.xlabel('N Classes')
         plt.ylabel('Accuracy (%)')
-        plt.yticks(np.arange(0, 100, 10))
-        plt.xticks(np.arange(0, 100, 20))
+        major_ticks = np.arange(0, 1.1, 0.1)
+        minor_ticks = np.arange(0, 1, 0.02)
+        ax.set_yticks(major_ticks)
+        ax.set_yticks(minor_ticks, minor=True)
+        ax.set_xticks(np.arange(10,110,10))
         ax.set_xlim(xmin=9,xmax=101)
-        ax.set_ylim(ymin=0.40,ymax=1.0)
+        ax.set_ylim(ymin=0.35,ymax=1.0)
 
         plt.tight_layout()
-        plt.grid()
+        plt.grid(axis='y')
         plt.show()
 
     def getPrevNewAccuracies(self,confusion_matrices):
