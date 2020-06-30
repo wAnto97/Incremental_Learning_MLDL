@@ -55,7 +55,7 @@ class Loss():
 
         clf_loss = clf_criterion(new_output[:,n_old_classes:],utils.one_hot_matrix(labels,n_classes*step)[:,n_old_classes:])
 
-        prob_vect = self.create_random_matrix(list(old_outputs.shape))
+        prob_vect = create_random_matrix(list(old_outputs.shape))
         dist_criterion = nn.BCEWithLogitsLoss(weight = 2*prob_vect.cuda(),reduction = 'mean')
         dist_loss = dist_criterion(new_output[:,:n_old_classes],sigmoid(old_outputs))
 

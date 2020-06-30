@@ -58,7 +58,7 @@ class Analysis():
 
                 if ((i+1) % classes_for_batch) == 0:
                     b = int(((i+1) / classes_for_batch)-1)
-                    batches_accuracies[b].append((100*sum_batch)/n_sample)
+                    batches_accuracies[b].append((sum_batch)/n_sample)
                     sum_batch = 0
 
 
@@ -129,17 +129,22 @@ class Analysis():
 
         fig, ax = plt.subplots(figsize=(12,10))
 
-        for i in range(10):#len(batches_accuracies)):
-            ax.plot(n_classes, batches_accuracies[i], marker ='o', label = f'Accuracy batch {i}')
+        for i in range(1):#len(batches_accuracies)):
+            ax.plot(n_classes, batches_accuracies[i], marker ='o', label = f'Accuracy batch {i+1}')
 
         ax.legend()
         plt.xlabel('N Classes')
         plt.ylabel('Accuracy (%)')
-        plt.yticks(np.arange(0, 100, 10))
-        plt.xticks(np.arange(0, 100, 20))
+        major_ticks = np.arange(0, 1.1, 0.1)
+        minor_ticks = np.arange(0, 1, 0.02)
+        ax.set_yticks(major_ticks)
+        ax.set_yticks(minor_ticks, minor=True)
+        ax.set_xticks(np.arange(10,110,10))
+        ax.set_xlim(xmin=9,xmax=101)
+        ax.set_ylim(ymin=0.35,ymax=1.0)
 
         plt.tight_layout()
-        plt.grid()
+        plt.grid(axis='y')
         plt.show()
 
     def getPrevNewAccuracies(self,confusion_matrices):
@@ -229,7 +234,7 @@ class Analysis():
         plt.legend()
         ax.grid(axis='y')
 
-    def plotAccTrendComparison(self,accuracies,labels):
+    def plotAccTrendComparison(self,accuracies,labels,limit_min=True):
         markers = ['^','o','x','+','D','*','v']
         colors = ['green','darkblue','orange','grey','black','purple','aqua']
 
@@ -246,8 +251,12 @@ class Analysis():
         ax.set_yticks(major_ticks)
         ax.set_yticks(minor_ticks, minor=True)
         ax.set_xticks(np.arange(10,110,10))
-        ax.set_xlim(xmin=9,xmax=101)
-        ax.set_ylim(ymin=0.35,ymax=1.0)
+        if not limit_min:
+            ax.set_xlim(xmin=9,xmax=101)
+            ax.set_ylim(ymin=0.0,ymax=1.0)
+        else:
+            ax.set_xlim(xmin=9,xmax=101)
+            ax.set_ylim(ymin=0.35,ymax=1.0)
         
         plt.legend()
         ax.grid(axis='y')
