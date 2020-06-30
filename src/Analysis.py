@@ -99,7 +99,7 @@ class Analysis():
 
         fig, ax = plt.subplots(figsize=(6,5))
 
-        ax.plot(n_classes, gaps_old_classes[0], marker ='o', label='Gap old classes')
+        ax.plot(n_classes, gaps_old_classes, marker ='o', label='Gap old classes')
         #ax.plot(n_classes, gaps_new_classes, marker ='o', label='Accuracy new classes')
 
         ax.legend()
@@ -129,7 +129,7 @@ class Analysis():
 
         fig, ax = plt.subplots(figsize=(12,10))
 
-        for i in range(10):#len(batches_accuracies)):
+        for i in range(1):#len(batches_accuracies)):
             ax.plot(n_classes, batches_accuracies[i], marker ='o', label = f'Accuracy batch {i}')
 
         ax.legend()
