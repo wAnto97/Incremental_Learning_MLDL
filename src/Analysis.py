@@ -234,9 +234,12 @@ class Analysis():
         plt.legend()
         ax.grid(axis='y')
 
-    def plotAccTrendComparison(self,accuracies,labels,limit_min=True):
+    def plotAccTrendComparison(self,accuracies,labels,limit_min=True,colors_list = None):
         markers = ['^','o','x','+','D','*','v']
-        colors = ['green','darkblue','orange','grey','black','purple','aqua']
+        if colors_list != None:
+            colors = colors_list
+        else:
+            colors = ['green','darkblue','orange','grey','black','purple','aqua']
 
         _,ax = plt.subplots(figsize=(12,8))
         for index,(acc,label) in enumerate(zip(accuracies,labels)):
