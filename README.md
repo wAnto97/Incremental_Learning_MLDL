@@ -1,4 +1,4 @@
-# Incremental_Learning_MLDL
+# Incremental Learning
 
 Literature review for the incremental learning problem and development of a new distillation loss applied to the state of the art algorithms.
 
